@@ -15,6 +15,22 @@ class HomeController extends Controller
     {
         return view('about');
     }
+    public function services(Request $request)
+    {
+        return view('services');
+    }
+    public function prices(Request $request)
+    {
+        return view('prices');
+    }
+    public function faq(Request $request)
+    {
+        return view('faq');
+    }
+    public function contact(Request $request)
+    {
+        return view('contact');
+    }
     public function terms(Request $request)
     {
         return view('terms');

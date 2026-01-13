@@ -2,14 +2,14 @@
     <div class="footer-wrapper01">
         <div class="container container-fluid-xl">
             <div class="row f-col-wrapper">
-                <div class="col-md-4"><a href="index.html" class="f-logo"><i class="icons-logo tt-icon"></i><span
-                            class="tt-base-color">Pro</span>Laundry</a>
+                <div class="col-md-4"><a href="{{ route('home') }}" class="f-logo"><i class="icons-logo tt-icon"></i><span
+                            class="tt-base-color">Desired</span>Wash</a>
                     <div class="f-text">We are professionals in the laundry and dry cleaning business, which means
                         we always stay up to date on the latest technologies and cleaning methods.</div>
                     <ul class="f-social">
                         <li><a href="https://twitter.com" target="_blank" class="icons-733635"></a></li>
                         <li><a href="https://www.facebook.com/" target="_blank" class="icons-59439"></a></li>
-                        <li><a href="index.html" target="_blank" class="icons-2111532"></a></li>
+                        <li><a href="{{ route('home') }}" target="_blank" class="icons-2111532"></a></li>
                         <li><a href="https://www.instagram.com/" target="_blank" class="icons-733614"></a></li>
                     </ul>
                 </div>
@@ -43,7 +43,8 @@
     </div>
     <div class="container container-fluid-xl">
         <div class="f-holder">
-            <div class="f-copyright">&copy; 2020 <span class="tt-base-color">Pro</span>Laundry. All Rights
+            <div class="f-copyright">&copy; {{ date('Y') }} <span class="tt-base-color">Desired</span>Wash. All
+                Rights
                 Reserved.
             </div>
             <ul class="f-link">

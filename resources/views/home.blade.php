@@ -2,7 +2,7 @@
     <x-slot name="title">Home</x-slot>
 
     <div id="js-mainSlider">
-        <div class="mainSlider-preloader"><span class="tt-base-color">Pro</span>Laundry</div>
+        <div class="mainSlider-preloader"><span class="tt-base-color">Desired</span>Wash</div>
         <div class="mainSlider-wrapper"></div>
     </div>
     <div class="section-inner lazyload bg-top-left move-top-bottom tt-overflow-hidden" data-bg="images/wrapper01.png">
@@ -62,7 +62,7 @@
                         driving
                         to the laundromats, we pickup and deliver for free!
                     </div>
-                </a><a href="contact.html" class="added-info__item col-md-4">
+                </a><a href="{{ route('contact') }}" class="added-info__item col-md-4">
                     <div class="added-info__icon icons-1485715"></div>
                     <div class="added-info__description">
                         <h6 class="added-info__title"><span>Pay Online in Seconds</span></h6>Manage your Press
@@ -496,7 +496,7 @@
                                             hard to make sure that the clothes you get back are spotless and ready
                                             for action.
                                         </div>
-                                    </a><a href="contact.html" class="added-info02__item col-md-4">
+                                    </a><a href="{{ route('contact') }}" class="added-info02__item col-md-4">
                                         <div class="added-info02__icon icons-3096677"></div>
                                         <div class="added-info02__description">
                                             <h6 class="added-info02__title"><span>Cleaner & Greener</span></h6>We

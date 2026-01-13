@@ -33,46 +33,20 @@
     <div id="js-init-sticky">
         <div class="tt-holder-wrapper">
             <div class="tt-holder">
-                <div class="tt-col-left"><!-- logo --> <a href="index.html" class="tt-logo tt-logo-alignment"><i
-                            class="icons-logo tt-icon"></i><span class="tt-base-color">Pro</span>Laundry
+                <div class="tt-col-left"><!-- logo --> <a href="{{ route('home') }}"
+                        class="tt-logo tt-logo-alignment"><i class="icons-logo tt-icon"></i><span
+                            class="tt-base-color">Desired</span>Wash
                     </a><!-- /logo --></div>
                 <div class="tt-col-center tt-col-wide tt-col-objects text-center">
                     <div class="tt-col__item"><!-- desktop-nav -->
                         <nav id="tt-nav">
                             <ul>
-                                <li><a href="index.html">Home</a></li>
-                                <li><a href="about.html">About Us</a>
-                                    <ul>
-                                        <li><a href="about.html">Sub menu level 01</a>
-                                            <ul>
-                                                <li><a href="about.html">Sub menu level 02</a></li>
-                                                <li><a href="about.html">Sub menu level 02</a></li>
-                                                <li><a href="about.html">Sub menu level 02</a>
-                                                    <ul>
-                                                        <li><a href="about.html">Sub menu level 03</a></li>
-                                                        <li><a href="about.html">Sub menu level 03</a></li>
-                                                        <li><a href="about.html">Sub menu level 03</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="about.html">Sub menu level 02</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="about.html">Sub menu level 01</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="services.html">Services</a>
-                                    <ul>
-                                        <li><a href="services-item.html">Services Item</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="price.html">Prices</a></li>
-                                <li><a href="blog.html">Blog</a>
-                                    <ul>
-                                        <li><a href="blog-item.html">Blog Item</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="faq.html">FAQ</a></li>
-                                <li><a href="contact.html">Contacts</a></li>
+                                <li><a href="{{ route('home') }}">Home</a></li>
+                                <li><a href="{{ route('about') }}">About</a></li>
+                                <li><a href="{{ route('prices') }}">Prices</a></li>
+                                <li><a href="{{ route('services') }}">Services</a></li>
+                                <li><a href="{{ route('faq') }}">FAQ</a></li>
+                                <li><a href="{{ route('contact') }}">Contacts</a></li>
                             </ul>
                         </nav><!-- /desktop-nav -->
                     </div>
