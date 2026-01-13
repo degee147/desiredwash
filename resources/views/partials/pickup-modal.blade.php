@@ -6,8 +6,7 @@
                 <div class="modal-titleblock">
                     <div class="modal-title">Schedule a Pickup</div>
                 </div>
-                <form class="form-modal" id="jsFormRequestQuote" method="post" novalidate="novalidate"
-                    action="index.html#">
+                <form class="form-modal" id="jsFormRequestQuote" method="post" novalidate="novalidate" action="#">
                     <div class="form-group"><input type="text" name="name" class="form-control" id="modalName01"
                             placeholder="Your Name *"></div>
                     <div class="row">

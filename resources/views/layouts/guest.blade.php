@@ -38,6 +38,22 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script async src="js/bundle.js"></script><!-- modal - Make an Appointment -->
     @include('partials.pickup-modal')
+    <a href="#" class="tt-btn tt-back-to-top" id="js-backtotop"><span class="mask"><svg version="1.1" x="0px"
+                y="0px" width="24" height="24" viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;"
+                xml:space="preserve">
+                <g>
+                    <polygon fill="currentColor" points="20.9,17.1 12.5,8.6 4.1,17.1 2.9,15.9 12.5,6.4 22.1,15.9 	">
+                    </polygon>
+                </g>
+            </svg></span>
+        <div class="button"><svg version="1.1" x="0px" y="0px" width="24" height="24" viewBox="0 0 24 24"
+                style="enable-background:new 0 0 24 24;" xml:space="preserve">
+                <g>
+                    <polygon fill="currentColor" points="20.9,17.1 12.5,8.6 4.1,17.1 2.9,15.9 12.5,6.4 22.1,15.9 	">
+                    </polygon>
+                </g>
+            </svg></div>
+    </a>
     {{-- @include('partials.color-swatch') --}}
 </body>
 

@@ -86,18 +86,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tt-col__item">
-                        <div class="tt-obj tt-obj-cart js-dropdown-cart"><a href="index.html#" class="tt-obj__btn"><i
+                    {{-- <div class="tt-col__item">
+                        <div class="tt-obj tt-obj-cart js-dropdown-cart"><a href="#" class="tt-obj__btn"><i
                                     class="icons-711897"></i>
                                 <div class="tt-obj__badge">2</div>
                             </a></div>
-                    </div>
-                    <div class="tt-col__item d-none d-md-block"><a href="index.html#" class="tt-btn" data-toggle="modal"
+                    </div> --}}
+                    <div class="tt-col__item d-none d-md-block"><a href="#" class="tt-btn" data-toggle="modal"
                             data-target="#modalMRequestQuote"><span class="mask">Schedule a
                                 Pickup</span>
                             <div class="button">Schedule a Pickup</div>
                         </a></div>
-                    <div class="tt-col__item toggle-wrapper"><a href="index.html#" id="tt-menu-toggle"
+                    <div class="tt-col__item toggle-wrapper"><a href="#" id="tt-menu-toggle"
                             class="icons-1828859"></a></div>
                 </div>
             </div>

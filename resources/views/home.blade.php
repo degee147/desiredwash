@@ -68,7 +68,7 @@
                         <h6 class="added-info__title"><span>Pay Online in Seconds</span></h6>Manage your Press
                         account and billing online from your smartphone or computer.
                     </div>
-                </a><a href="index.html#" class="added-info__item col-md-4">
+                </a><a href="#" class="added-info__item col-md-4">
                     <div class="added-info__icon icons-3037040"></div>
                     <div class="added-info__description">
                         <h6 class="added-info__title"><span>Eco-Friendly</span></h6>We use safe and clean perc-free
@@ -298,7 +298,7 @@
                             service that includes pick up and delivery.</p>
                         <p>We have been in the laundry business for more than 12 years and would love to earn your
                             business. Try us today and save $10 Off your first laundry service of 20 pounds or more.
-                        </p><a href="index.html#" class="tt-btn tt-btn__top" data-toggle="modal"
+                        </p><a href="#" class="tt-btn tt-btn__top" data-toggle="modal"
                             data-target="#modalMRequestQuote"><span class="mask">Get Service Now</span>
                             <div class="button">Get Service Now</div>
                         </a>
@@ -452,14 +452,14 @@
                         <div class="tt-ajax-tabs">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item"><a class="nav-link show active" data-toggle="tab"
-                                        href="index.html#tt-tab-01" role="tab">Our Approach</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab"
-                                        href="index.html#tt-tab-02" role="tab"
+                                        href="#tt-tab-01" role="tab">Our Approach</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tt-tab-02"
+                                        role="tab"
                                         data-ajax-include="ajax-content/tabs-questions-answers.html">Questions /
                                         Answers</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab"
-                                        href="index.html#tt-tab-03" role="tab"
-                                        data-ajax-include="ajax-content/tabs-why-choose-us.html">Why Choose Us</a>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tt-tab-03"
+                                        role="tab" data-ajax-include="ajax-content/tabs-why-choose-us.html">Why
+                                        Choose Us</a>
                                 </li>
                             </ul>
                         </div>
@@ -502,7 +502,7 @@
                                             <h6 class="added-info02__title"><span>Cleaner & Greener</span></h6>We
                                             work with the environment in mind. No harsh chemicals.
                                         </div>
-                                    </a><a href="index.html#" class="added-info02__item col-md-4">
+                                    </a><a href="#" class="added-info02__item col-md-4">
                                         <div class="added-info02__icon icons-686308"></div>
                                         <div class="added-info02__description">
                                             <h6 class="added-info02__title"><span>Happiness Guarantee</span></h6>If
@@ -559,7 +559,7 @@
                                     <div class="promo03__title">Shirts Service</div>
                                     <div class="promo03__subtitle">Washed and Pressed</div>
                                     <div class="promo03__price"><span class="tt-value">$2.00</span></div>
-                                    <div class="promo03__show-btn"><a href="index.html#" class="tt-btn"><span
+                                    <div class="promo03__show-btn"><a href="#" class="tt-btn"><span
                                                 class="mask">Order Now</span>
                                             <div class="button">Order Now</div>
                                         </a></div>
@@ -573,7 +573,7 @@
                                     <div class="promo03__title">Day Dress Service</div>
                                     <div class="promo03__subtitle">Dry Clean</div>
                                     <div class="promo03__price"><span class="tt-value">$10.50</span></div>
-                                    <div class="promo03__show-btn"><a href="index.html#" class="tt-btn"><span
+                                    <div class="promo03__show-btn"><a href="#" class="tt-btn"><span
                                                 class="mask">Order Now</span>
                                             <div class="button">Order Now</div>
                                         </a></div>
@@ -587,7 +587,7 @@
                                     <div class="promo03__title">Dry Cleaning</div>
                                     <div class="promo03__subtitle">Wash, Dry and Fold</div>
                                     <div class="promo03__price"><span class="tt-value">$2.00</span></div>
-                                    <div class="promo03__show-btn"><a href="index.html#" class="tt-btn"><span
+                                    <div class="promo03__show-btn"><a href="#" class="tt-btn"><span
                                                 class="mask">Order Now</span>
                                             <div class="button">Order Now</div>
                                         </a></div>
@@ -601,7 +601,7 @@
                                     <div class="promo03__title">Bedding</div>
                                     <div class="promo03__subtitle">Bed Set (Wash and Press)</div>
                                     <div class="promo03__price"><span class="tt-value">$10.50</span></div>
-                                    <div class="promo03__show-btn"><a href="index.html#" class="tt-btn"><span
+                                    <div class="promo03__show-btn"><a href="#" class="tt-btn"><span
                                                 class="mask">Order Now</span>
                                             <div class="button">Order Now</div>
                                         </a></div>
@@ -615,7 +615,7 @@
                                     <div class="promo03__title">Blanket Service</div>
                                     <div class="promo03__subtitle">Washed and Pressed</div>
                                     <div class="promo03__price"><span class="tt-value">$25.00</span></div>
-                                    <div class="promo03__show-btn"><a href="index.html#" class="tt-btn"><span
+                                    <div class="promo03__show-btn"><a href="#" class="tt-btn"><span
                                                 class="mask">Order Now</span>
                                             <div class="button">Order Now</div>
                                         </a></div>
@@ -629,7 +629,7 @@
                                     <div class="promo03__title">Curtains Service</div>
                                     <div class="promo03__subtitle">Washed and Pressed</div>
                                     <div class="promo03__price"><span class="tt-value">$22.00</span></div>
-                                    <div class="promo03__show-btn"><a href="index.html#" class="tt-btn"><span
+                                    <div class="promo03__show-btn"><a href="#" class="tt-btn"><span
                                                 class="mask">Order Now</span>
                                             <div class="button">Order Now</div>
                                         </a></div>
@@ -643,7 +643,7 @@
                                     <div class="promo03__title">Ironing Service</div>
                                     <div class="promo03__subtitle">Iron and Fold</div>
                                     <div class="promo03__price"><span class="tt-value">$3.00</span></div>
-                                    <div class="promo03__show-btn"><a href="index.html#" class="tt-btn"><span
+                                    <div class="promo03__show-btn"><a href="#" class="tt-btn"><span
                                                 class="mask">Order Now</span>
                                             <div class="button">Order Now</div>
                                         </a></div>
@@ -657,7 +657,7 @@
                                     <div class="promo03__title">Repairs & Alterations</div>
                                     <div class="promo03__subtitle">Simple Sewing</div>
                                     <div class="promo03__price"><span class="tt-value">$12.00</span></div>
-                                    <div class="promo03__show-btn"><a href="index.html#" class="tt-btn"><span
+                                    <div class="promo03__show-btn"><a href="#" class="tt-btn"><span
                                                 class="mask">Order Now</span>
                                             <div class="button">Order Now</div>
                                         </a></div>
@@ -693,10 +693,10 @@
                         hours, and more slapping the snooze button every morning — we've got laundry day covered.
                     </p>
                     <ul class="tt-list-img tt-list-img__top">
-                        <li><a href="index.html#"><img class="lazyload"
+                        <li><a href="#"><img class="lazyload"
                                     src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                                     data-src="images/img05.png" alt=""></a></li>
-                        <li><a href="index.html#"><img class="lazyload"
+                        <li><a href="#"><img class="lazyload"
                                     src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                                     data-src="images/img06.png" alt=""></a></li>
                     </ul>
@@ -821,7 +821,7 @@
                                 </ul>
                             </div>
                             <div class="promo02__price">$349.00</div>
-                            <div class="promo02__show-btn"><a href="index.html#" class="tt-btn tt-btn__wide"><span
+                            <div class="promo02__show-btn"><a href="#" class="tt-btn tt-btn__wide"><span
                                         class="mask">Order Now</span>
                                     <div class="button">Order Now</div>
                                 </a></div>
@@ -845,7 +845,7 @@
                                 </ul>
                             </div>
                             <div class="promo02__price">$399.00</div>
-                            <div class="promo02__show-btn"><a href="index.html#" class="tt-btn tt-btn__wide"><span
+                            <div class="promo02__show-btn"><a href="#" class="tt-btn tt-btn__wide"><span
                                         class="mask">Order Now</span>
                                     <div class="button">Order Now</div>
                                 </a></div>
@@ -870,7 +870,7 @@
                             </div>
                             <div class="promo02__price"><span class="old-price">$449.00</span> <span
                                     class="new-price">$449.00</span></div>
-                            <div class="promo02__show-btn"><a href="index.html#" class="tt-btn tt-btn__wide"><span
+                            <div class="promo02__show-btn"><a href="#" class="tt-btn tt-btn__wide"><span
                                         class="mask">Order Now</span>
                                     <div class="button">Order Now</div>
                                 </a></div>

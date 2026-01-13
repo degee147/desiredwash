@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-md-4">
                     <h6 class="f-title">Newsletter Subscribe</h6>
-                    <form id="subscribeform" method="post" novalidate="novalidate" action="index.html#">
+                    <form id="subscribeform" method="post" novalidate="novalidate" action="#">
                         <div class="f-form">
                             <div class="f-form__label">Sign up and receive our special offers.</div>
                             <div class="f-form__input"><input type="text" name="email" class="form-control"
@@ -47,8 +47,8 @@
                 Reserved.
             </div>
             <ul class="f-link">
-                <li><a href="index.html#">Terms and Conditions</a></li>
-                <li><a href="index.html#">Privacy Policy</a></li>
+                <li><a href="#">Terms and Conditions</a></li>
+                <li><a href="#">Privacy Policy</a></li>
             </ul>
         </div>
     </div>
