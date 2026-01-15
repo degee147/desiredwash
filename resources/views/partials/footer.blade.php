@@ -49,8 +49,8 @@
                 Reserved.
             </div>
             <ul class="f-link">
-                <li><a href="#">Terms and Conditions</a></li>
-                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="javascript:void(0)">Terms and Conditions</a></li>
+                <li><a href="javascript:void(0)">Privacy Policy</a></li>
             </ul>
         </div>
     </div>

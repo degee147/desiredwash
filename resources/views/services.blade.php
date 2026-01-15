@@ -12,85 +12,85 @@
                     <div class="row img-box__wrapper">
                         <div class="col-custom-450 col-6 col-md-4">
                             <div class="img-box">
-                                <div class="img-box__img"><a href="services-item.html"><img
+                                <div class="img-box__img"><a href="javascript:void(0)"><img
                                             src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                                             class="lazyload" data-src="images/img07.jpg" alt=""></a>
                                     <div class="img-box__label icons-technology"></div>
-                                </div><a href="services-item.html" class="img-box__title">Laundry Services</a>
+                                </div><a href="javascript:void(0)" class="img-box__title">Laundry Services</a>
                                 <p>Let us pick up your dirty laundry, sort it, pre-treat stains, wash, dry, fold and
-                                    deliver back to you in one neat, easy package.</p><a href="services-item.html"
+                                    deliver back to you in one neat, easy package.</p><a href="javascript:void(0)"
                                     class="tt-btn"><span class="mask">More Info</span>
-                                    <div class="button">More Info</div>
+                                    {{-- <div class="button">More Info</div> --}}
                                 </a>
                             </div>
                         </div>
                         <div class="col-custom-450 col-6 col-md-4">
                             <div class="img-box">
-                                <div class="img-box__img"><a href="services-item.html"><img
+                                <div class="img-box__img"><a href="javascript:void(0)"><img
                                             src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                                             class="lazyload" data-src="images/img08.jpg" alt=""></a>
                                     <div class="img-box__label icons-hanger-with-clothes"></div>
-                                </div><a href="services-item.html" class="img-box__title">Dry Cleaning Services</a>
+                                </div><a href="javascript:void(0)" class="img-box__title">Dry Cleaning Services</a>
                                 <p>SMU students and local residents love on our reliable dry cleaning services for
-                                    the fast, accurate, top quality results.</p><a href="services-item.html"
+                                    the fast, accurate, top quality results.</p><a href="javascript:void(0)"
                                     class="tt-btn"><span class="mask">More Info</span>
-                                    <div class="button">More Info</div>
+                                    {{-- <div class="button">More Info</div> --}}
                                 </a>
                             </div>
                         </div>
                         <div class="col-custom-450 col-6 col-md-4">
                             <div class="img-box">
-                                <div class="img-box__img"><a href="services-item.html"><img
+                                <div class="img-box__img"><a href="javascript:void(0)"><img
                                             src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                                             class="lazyload" data-src="images/img09.jpg" alt=""></a>
                                     <div class="img-box__label icons-pilesos"></div>
-                                </div><a href="services-item.html" class="img-box__title">Carpet Cleaning</a>
+                                </div><a href="javascript:void(0)" class="img-box__title">Carpet Cleaning</a>
                                 <p>To keep carpet at peak performance, we recommend professional deep cleaning your
-                                    carpet every 12 to 18 months.</p><a href="services-item.html" class="tt-btn"><span
+                                    carpet every 12 to 18 months.</p><a href="javascript:void(0)" class="tt-btn"><span
                                         class="mask">More Info</span>
-                                    <div class="button">More Info</div>
+                                    {{-- <div class="button">More Info</div> --}}
                                 </a>
                             </div>
                         </div>
                         <div class="col-custom-450 col-6 col-md-4">
                             <div class="img-box">
-                                <div class="img-box__img"><a href="services-item.html"><img
+                                <div class="img-box__img"><a href="javascript:void(0)"><img
                                             src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                                             class="lazyload" data-src="images/img10.jpg" alt=""></a>
                                     <div class="img-box__label icons-sewing-machine"></div>
-                                </div><a href="services-item.html" class="img-box__title">Alterations & Repairs</a>
+                                </div><a href="javascript:void(0)" class="img-box__title">Alterations & Repairs</a>
                                 <p>We have expert seamstresses and tailors on staff to ensure we meet and exceed
-                                    your fitting requirements.</p><a href="services-item.html" class="tt-btn"><span
+                                    your fitting requirements.</p><a href="javascript:void(0)" class="tt-btn"><span
                                         class="mask">More Info</span>
-                                    <div class="button">More Info</div>
+                                    {{-- <div class="button">More Info</div> --}}
                                 </a>
                             </div>
                         </div>
                         <div class="col-custom-450 col-6 col-md-4">
                             <div class="img-box">
-                                <div class="img-box__img"><a href="services-item.html"><img
+                                <div class="img-box__img"><a href="javascript:void(0)"><img
                                             src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                                             class="lazyload" data-src="images/img11.jpg" alt=""></a>
                                     <div class="img-box__label icons-ironing-board"></div>
-                                </div><a href="services-item.html" class="img-box__title">Steam Iron</a>
+                                </div><a href="javascript:void(0)" class="img-box__title">Steam Iron</a>
                                 <p>These services are accomplished under the guidance of adroit personnel who have
-                                    affluent industry proficiency.</p><a href="services-item.html" class="tt-btn"><span
+                                    affluent industry proficiency.</p><a href="javascript:void(0)" class="tt-btn"><span
                                         class="mask">More Info</span>
-                                    <div class="button">More Info</div>
+                                    {{-- <div class="button">More Info</div> --}}
                                 </a>
                             </div>
                         </div>
                         <div class="col-custom-450 col-6 col-md-4">
                             <div class="img-box">
-                                <div class="img-box__img"><a href="services-item.html"><img
+                                <div class="img-box__img"><a href="javascript:void(0)"><img
                                             src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                                             class="lazyload" data-src="images/img12.jpg" alt=""></a>
                                     <div class="img-box__label icons-shoes"></div>
-                                </div><a href="services-item.html" class="img-box__title">Shoes Cleaning</a>
+                                </div><a href="javascript:void(0)" class="img-box__title">Shoes Cleaning</a>
                                 <p>We use premium cleaning products and standardised processes to take care of your
-                                    shoes and give them refreshed look.</p><a href="services-item.html"
+                                    shoes and give them refreshed look.</p><a href="javascript:void(0)"
                                     class="tt-btn"><span class="mask">More Info</span>
-                                    <div class="button">More Info</div>
+                                    {{-- <div class="button">More Info</div> --}}
                                 </a>
                             </div>
                         </div>

@@ -14,12 +14,12 @@
                         src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                         data-src="images/arrow-img-right.png" alt="">
                     <div class="box01__img-label">
-                        <div class="tt-text01">25</div>years of<br>experience
+                        <div class="tt-text01">10</div>years of<br>experience
                     </div>
                 </div>
                 <div class="box01__content">
                     <div class="title-block">
-                        <div class="title-block__label">More than 25 Years of Experience</div>
+                        <div class="title-block__label">More than 10 Years of Experience</div>
                         <h4 class="title-block__title">We are Passionate About Laundry</h4>
                     </div>
                     <div class="box01__wrapper-img"><img
@@ -113,7 +113,7 @@
 							}
 						]
 					}'>
-                    <div class="tt-item"><a href="services-item.html" class="imgbox-inner svg-animation-01">
+                    <div class="tt-item"><a href="javascript:void(0)" class="imgbox-inner svg-animation-01">
                             <div class="imgbox-inner__img"><img
                                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAIIAQMAAACIJgJoAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAD1JREFUeNrtwTEBAAAAwiD7pzbDfmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQHmmAAAa/2RGEAAAAASUVORK5CYII="
                                     data-src="images/imgbox-inner__img01.jpg" class="lazyload" alt="">
@@ -145,7 +145,7 @@
                                 </div>
                             </div>
                         </a></div>
-                    <div class="tt-item"><a href="services-item.html" class="imgbox-inner svg-animation-02">
+                    <div class="tt-item"><a href="javascript:void(0)" class="imgbox-inner svg-animation-02">
                             <div class="imgbox-inner__img"><img
                                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAIIAQMAAACIJgJoAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAD1JREFUeNrtwTEBAAAAwiD7pzbDfmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQHmmAAAa/2RGEAAAAASUVORK5CYII="
                                     data-src="images/imgbox-inner__img02.jpg" class="lazyload" alt="">
@@ -205,7 +205,7 @@
                                 </div>
                             </div>
                         </a></div>
-                    <div class="tt-item"><a href="services-item.html" class="imgbox-inner svg-animation-03">
+                    <div class="tt-item"><a href="javascript:void(0)" class="imgbox-inner svg-animation-03">
                             <div class="imgbox-inner__img"><img
                                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAIIAQMAAACIJgJoAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAD1JREFUeNrtwTEBAAAAwiD7pzbDfmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQHmmAAAa/2RGEAAAAASUVORK5CYII="
                                     data-src="images/imgbox-inner__img03.jpg" class="lazyload" alt="">
@@ -231,7 +231,7 @@
                                 </div>
                             </div>
                         </a></div>
-                    <div class="tt-item"><a href="services-item.html" class="imgbox-inner">
+                    <div class="tt-item"><a href="javascript:void(0)" class="imgbox-inner">
                             <div class="imgbox-inner__img"><img
                                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAIIAQMAAACIJgJoAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAD1JREFUeNrtwTEBAAAAwiD7pzbDfmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQHmmAAAa/2RGEAAAAASUVORK5CYII="
                                     data-src="images/imgbox-inner__img04.jpg" class="lazyload" alt="">
@@ -247,7 +247,7 @@
                                 </div>
                             </div>
                         </a></div>
-                    <div class="tt-item"><a href="services-item.html" class="imgbox-inner">
+                    <div class="tt-item"><a href="javascript:void(0)" class="imgbox-inner">
                             <div class="imgbox-inner__img"><img
                                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAIIAQMAAACIJgJoAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAD1JREFUeNrtwTEBAAAAwiD7pzbDfmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQHmmAAAa/2RGEAAAAASUVORK5CYII="
                                     data-src="images/imgbox-inner__img05.jpg" class="lazyload" alt="">
@@ -263,7 +263,7 @@
                                 </div>
                             </div>
                         </a></div>
-                    <div class="tt-item"><a href="services-item.html" class="imgbox-inner">
+                    <div class="tt-item"><a href="javascript:void(0)" class="imgbox-inner">
                             <div class="imgbox-inner__img"><img
                                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAIIAQMAAACIJgJoAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAD1JREFUeNrtwTEBAAAAwiD7pzbDfmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQHmmAAAa/2RGEAAAAASUVORK5CYII="
                                     data-src="images/imgbox-inner__img06.jpg" class="lazyload" alt="">

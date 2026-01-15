@@ -17,7 +17,7 @@
                         <div class="layout01__content">
                             <div class="layout01__content-wrapper">
                                 <div class="title-block">
-                                    <div class="title-block__label">[ More than 25 Years of Experience ]</div>
+                                    <div class="title-block__label">[ More than 10 Years of Experience ]</div>
                                     <h4 class="title-block__title">Your Dry Cleaning and Laundry. Done.</h4>
                                 </div>
                                 <p>We are professionals in the laundry and dry cleaning business, which means we
