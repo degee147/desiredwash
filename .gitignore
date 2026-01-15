@@ -25,6 +25,8 @@ yarn-error.log
 deploy.sh
 /public/deploy.php
 .well-known
+/.well-known
+/cgi-bin
 /public/error_log
 /public/~/
 public/.well-known/
