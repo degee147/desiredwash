@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Desired Wash</title>
+    <title>{{ !empty($title) ? $title . ' | ' : '' }} Desired Wash</title>
     <meta name="keywords"
         content="laundry pickup service, laundry delivery, dry cleaning service, on-demand laundry, laundry app Nigeria, doorstep laundry service, wash and fold service, Desired Wash">
     <meta name="description"

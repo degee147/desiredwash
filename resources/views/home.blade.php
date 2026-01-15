@@ -519,7 +519,7 @@
             </div>
         </div>
         <div class="tt-position-relative">
-            <div class="section-indent">
+            {{-- <div class="section-indent">
                 <div class="lazyload tt-obj02-bg" data-bg="images/wrapper05.png"></div>
                 <div class="container">
                     <div class="title-block text-center">
@@ -666,7 +666,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
+
+            @include('partials.price-slider', ['prices' => $prices])
         </div>
     </div>
     <div class="section-indent">
