@@ -797,6 +797,9 @@
     <div class="tt-position-relative tt-overflow-hidden">
         <div class="lazyload tt-obj03-bg" data-bg="images/wrapper06.png"></div>
         <div class="section-indent">
+            @include('partials.price-packages', ['packages' => $packages])
+        </div>
+        {{-- <div class="section-indent">
             <div class="container container-fluid-lg">
                 <div class="title-block text-center">
                     <div class="title-block__label">[ What we offer ]</div>
@@ -880,7 +883,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="container section-inner container-fluid-xl no-gutters">
             <div class="tt-promo">
                 <div class="tt-promo__descriptions">

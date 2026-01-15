@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Price;
+use App\Models\Package;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -47,7 +48,9 @@ class HomeController extends Controller
             ->take(8)
             ->get();
 
-        return view('home', compact('featuredPrices', 'pricesByCategory', 'popularItems', 'prices'));
+        $packages = Package::active()->ordered()->get();
+
+        return view('home', compact('featuredPrices', 'pricesByCategory', 'popularItems', 'prices', 'packages'));
     }
     public function about(Request $request)
     {
@@ -59,7 +62,15 @@ class HomeController extends Controller
     }
     public function prices(Request $request)
     {
-        return view('prices');
+        $prices = Price::active()
+            ->whereNotNull('icon_class')
+            ->whereNotNull('description')
+            ->take(8)
+            ->get();
+
+        $packages = Package::active()->ordered()->get();
+
+        return view('prices', compact('prices', 'packages'));
     }
     public function faq(Request $request)
     {

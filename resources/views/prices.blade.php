@@ -3,7 +3,7 @@
 
     <div class="lazyload subpage-bg-left subpage-bg__position05" data-bg="images/wrapper-subpage-left05.png">
         <div class="lazyload subpage-bg-right subpage-bg__position05" data-bg="images/wrapper-subpage-right05.png">
-            <div class="section-indent">
+            {{-- <div class="section-indent">
                 <div class="container container-fluid-lg">
                     <div class="title-block text-center">
                         <div class="title-block__label">[ Affordable Prices ]</div>
@@ -157,8 +157,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="section-indent">
+            </div> --}}
+
+            @include('partials.price-slider', ['prices' => $prices])
+
+            {{-- <div class="section-indent">
                 <div class="container container-fluid-lg">
                     <div class="title-block text-center">
                         <div class="title-block__label">[ Our Service Prices ]</div>
@@ -508,9 +511,10 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="section-inner02 tt-overflow-hidden">
-                <div class="container container-fluid-lg">
+                @include('partials.price-packages', ['packages' => $packages])
+                {{-- <div class="container container-fluid-lg">
                     <div class="title-block text-center">
                         <div class="title-block__label">[ What we offer ]</div>
                         <h4 class="title-block__title">Price Packages</h4>
@@ -536,8 +540,8 @@
                                     </ul>
                                 </div>
                                 <div class="promo02__price">$349.00</div>
-                                <div class="promo02__show-btn"><a href="price.html#"
-                                        class="tt-btn tt-btn__wide"><span class="mask">Order Now</span>
+                                <div class="promo02__show-btn"><a href="price.html#" class="tt-btn tt-btn__wide"><span
+                                            class="mask">Order Now</span>
                                         <div class="button">Order Now</div>
                                     </a></div>
                             </div>
@@ -560,8 +564,8 @@
                                     </ul>
                                 </div>
                                 <div class="promo02__price">$399.00</div>
-                                <div class="promo02__show-btn"><a href="price.html#"
-                                        class="tt-btn tt-btn__wide"><span class="mask">Order Now</span>
+                                <div class="promo02__show-btn"><a href="price.html#" class="tt-btn tt-btn__wide"><span
+                                            class="mask">Order Now</span>
                                         <div class="button">Order Now</div>
                                     </a></div>
                             </div>
@@ -585,14 +589,14 @@
                                 </div>
                                 <div class="promo02__price"><span class="old-price">$449.00</span> <span
                                         class="new-price">$449.00</span></div>
-                                <div class="promo02__show-btn"><a href="price.html#"
-                                        class="tt-btn tt-btn__wide"><span class="mask">Order Now</span>
+                                <div class="promo02__show-btn"><a href="price.html#" class="tt-btn tt-btn__wide"><span
+                                            class="mask">Order Now</span>
                                         <div class="button">Order Now</div>
                                     </a></div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
