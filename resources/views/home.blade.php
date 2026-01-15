@@ -737,60 +737,64 @@
                     <div class="tt-item">
                         <div class="title-block">
                             <div class="title-block__label">[ Our Testimonials ]</div>
-                            <h4 class="title-block__title">Professional, Reliable & Cost Effective</h4>
+                            <h4 class="title-block__title">Professional, Reliable & Affordable</h4>
                         </div>
                         <blockquote>
-                            <p>"This was my first time coming to a Laundromat ever. I was greeted by a woman with a
-                                warm smile. I was looking around and she could tell I needed help. She started me up
-                                with purchasing a Laundry Card. She then gave me recommendations per the clothes I
-                                had. She was so helpful and friendly. Being new to the city this is now my go to.
-                                Very clean and up date machines. :)"</p>
-                            <p><strong class="tt-base-color02">- Teresa and Kevin K.</strong></p>
+                            <p>
+                                "This was my first time using DesiredWash, and I was really impressed. I was welcomed
+                                warmly and guided through the process. The staff were very polite and professional, and
+                                my clothes came back neat and fresh. I’ve found my go-to laundry service."
+                            </p>
+                            <p><strong class="tt-base-color02">- Adebayo O.</strong></p>
                         </blockquote>
                     </div>
+
                     <div class="tt-item">
                         <div class="title-block">
                             <div class="title-block__label">[ Our Testimonials ]</div>
-                            <h4 class="title-block__title">Very Pleased. Will Definitely be Back.</h4>
+                            <h4 class="title-block__title">Very Satisfied. Highly Recommended.</h4>
                         </div>
                         <blockquote>
-                            <p>I don’t dry clean a lot of clothes, but I’ve been going here for 5 years and they
-                                have never once been late, the customer service is always great, and I’ve never had
-                                a quality concern. As I recall from my previous dry cleaner, they might be slightly
-                                above market cost, but I’m willing to pay a small premium for consistency though I
-                                recognize that cost may be the most important consideration.</p>
-                            <p><strong class="tt-base-color02">- Alice Munguia</strong></p>
+                            <p>
+                                "I’ve been using DesiredWash for several years now, and they’ve never disappointed. My
+                                clothes are always ready on time, customer service is excellent, and the quality is
+                                consistent. Their pricing is fair for the level of service they deliver."
+                            </p>
+                            <p><strong class="tt-base-color02">- Kemi A.</strong></p>
                         </blockquote>
                     </div>
+
                     <div class="tt-item">
                         <div class="title-block">
                             <div class="title-block__label">[ Our Testimonials ]</div>
-                            <h4 class="title-block__title">Excellent and Superb Customer Service</h4>
+                            <h4 class="title-block__title">Excellent Customer Service</h4>
                         </div>
                         <blockquote>
-                            <p>“The washer and dryer at my apartment building are not so great, so this has become
-                                my go-to spot every weekend. The prices are pretty reasonable, and they have big
-                                washers so I can get a lot done at once. There are plenty of couches and tables and
-                                chairs. They have TVs, arcade games, and a pool table. It’s not a bad place to hang
-                                out and do laundry.”</p>
-                            <p><strong class="tt-base-color02">- Lena Broughton</strong></p>
+                            <p>
+                                "With my busy schedule, I don’t always have time to wash clothes myself. DesiredWash has
+                                been a lifesaver. The service is convenient, the environment is clean, and my clothes
+                                always come out well done. I trust them completely."
+                            </p>
+                            <p><strong class="tt-base-color02">- Chinedu N.</strong></p>
                         </blockquote>
                     </div>
+
                     <div class="tt-item">
                         <div class="title-block">
                             <div class="title-block__label">[ Our Testimonials ]</div>
-                            <h4 class="title-block__title">The Quality of Work Was Excellent!</h4>
+                            <h4 class="title-block__title">Top-Notch Quality and Care</h4>
                         </div>
                         <blockquote>
-                            <p>"I was skeptical about leaving my clothes to be washed dried and folded by someone I
-                                did not know, and let me tell you I was beyond amazed by the quality they put into
-                                the process of washing drying and folding. It was packaged and put back into the bin
-                                I delivered my dirty clothes in, and was notified through email and text when it was
-                                ready!"</p>
-                            <p><strong class="tt-base-color02">- Beverly Garmon</strong></p>
+                            <p>
+                                "I was initially hesitant to hand over my clothes, but DesiredWash exceeded my
+                                expectations. Everything was neatly washed, pressed, and properly packaged. I also
+                                received updates when my clothes were ready. Very professional service."
+                            </p>
+                            <p><strong class="tt-base-color02">- Sola T.</strong></p>
                         </blockquote>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

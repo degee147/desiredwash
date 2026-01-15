@@ -106,7 +106,7 @@
                             <source srcset="images/box02-img01-md.webp" media="(max-width: 1024px)"
                                 type="image/webp">
                             <source srcset="images/box02-img01-md.jpg" media="(max-width: 1024px)" type="image/png">
-                            <source srcset="images/box02-img01.webp" type="image/webp">
+                            <source srcset="images/box02-img01.jpg" type="image/webp">
                             <source srcset="images/box02-img01.jpg" type="image/png"><img
                                 src="images/box02-img01.jpg" alt="">
                         </picture><img class="tt-arrow" src="images/arrow-img-right03.png" alt="">

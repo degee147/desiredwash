@@ -94,7 +94,7 @@
                             <p>The most trusted brand in clothing care since 2018. At DesiredWash, we take every
                                 possible step to return your clothes in excellent condition. In the rare event that an
                                 item is lost or damaged during the cleaning process, we offer fair compensation, subject
-                                to our service terms, to ensure your peace of mind.</p><a href="{{ route('about') }}"
+                                to our service terms, to ensure your peace of mind.</p><a href="{{ route('services') }}"
                                 class="tt-btn tt-btn__top" data-toggle="modal" data-target="#modalMRequestQuote"><span
                                     class="mask">Get Service Now</span>
                                 <div class="button">Get Service Now</div>
@@ -109,72 +109,99 @@
                         <div class="title-block__label">[ Our Advantages ]</div>
                         <h4 class="title-block__title">Why Choose Us</h4>
                     </div>
-                    <div class="added-info02 row"><a href="{{ route('contact') }}" class="added-info02__item col-md-4">
+
+                    <div class="added-info02 row">
+                        <a href="{{ route('contact') }}" class="added-info02__item col-md-4">
                             <div class="added-info02__icon icons-bright-lightbulb"></div>
                             <div class="added-info02__description">
-                                <h6 class="added-info02__title"><span>Persionalized Experience</span></h6>We take
-                                utmost care of your clothes, segregating based on the cloth type and giving you
-                                instant clothes to make a statement.
+                                <h6 class="added-info02__title"><span>Personalised Care</span></h6>
+                                We give every item individual attention, carefully sorting by fabric type and treating
+                                your
+                                clothes to ensure they always look their best.
                             </div>
-                        </a><a href="{{ route('contact') }}" class="added-info02__item col-md-4">
+                        </a>
+
+                        <a href="{{ route('contact') }}" class="added-info02__item col-md-4">
                             <div class="added-info02__icon icons-tag-1"></div>
                             <div class="added-info02__description">
-                                <h6 class="added-info02__title"><span>Affordable Pricing</span></h6>Prices that
-                                suits your pocket is one of our USP. An option of choosing between 2 types of
-                                pricing is available.
+                                <h6 class="added-info02__title"><span>Affordable Pricing</span></h6>
+                                Our pricing is fair and transparent, designed to suit your budget without compromising
+                                on
+                                quality.
                             </div>
-                        </a><a href="{{ route('about') }}#" class="added-info02__item col-md-4">
+                        </a>
+
+                        <a href="{{ route('about') }}#" class="added-info02__item col-md-4">
                             <div class="added-info02__icon icons-reading-book"></div>
                             <div class="added-info02__description">
-                                <h6 class="added-info02__title"><span>Convenience</span></h6>With just a tap of a
-                                button, your laundry gets done, giving your leisure time to spend with family and
-                                friends.
+                                <h6 class="added-info02__title"><span>Convenience</span></h6>
+                                From pickup to delivery, we make laundry easy so you can focus on work, family, and what
+                                matters
+                                most.
                             </div>
-                        </a><a href="{{ route('about') }}#" class="added-info02__item col-md-4">
+                        </a>
+
+                        <a href="{{ route('about') }}#" class="added-info02__item col-md-4">
                             <div class="added-info02__icon icons-3022225"></div>
                             <div class="added-info02__description">
-                                <h6 class="added-info02__title"><span>Quality</span></h6>We use the best in class
-                                products, to assure that your favorite clothes are always there for you to wear.
+                                <h6 class="added-info02__title"><span>Premium Quality</span></h6>
+                                We use high-quality cleaning products and modern equipment to protect and extend the
+                                life of your
+                                garments.
                             </div>
-                        </a><a href="{{ route('about') }}#" class="added-info02__item col-md-4">
+                        </a>
+
+                        <a href="{{ route('about') }}#" class="added-info02__item col-md-4">
                             <div class="added-info02__icon icons-express-delivery"></div>
                             <div class="added-info02__description">
-                                <h6 class="added-info02__title"><span>Express Delivery</span></h6>With our super
-                                express delivery, we would get your laundry done in less than 8 hours.
+                                <h6 class="added-info02__title"><span>Fast Turnaround</span></h6>
+                                Need your clothes quickly? Our express service ensures timely delivery without
+                                sacrificing
+                                quality.
                             </div>
-                        </a><a href="{{ route('about') }}#" class="added-info02__item col-md-4">
+                        </a>
+
+                        <a href="{{ route('about') }}#" class="added-info02__item col-md-4">
                             <div class="added-info02__icon icons-interface"></div>
                             <div class="added-info02__description">
-                                <h6 class="added-info02__title"><span>Instant Order Update</span></h6>Regular
-                                updates of your order, to help you keep a track of your laundry and plan
-                                accordingly.
+                                <h6 class="added-info02__title"><span>Order Updates</span></h6>
+                                Stay informed with regular updates, so you always know the status of your laundry.
                             </div>
-                        </a></div>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="section-indent">
                 <div class="box02 box02__img-left">
-                    <div class="box02__img"><img
-                            src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-                            class="lazyload" data-src="images/box02-img03.jpg" alt=""> <img class="tt-arrow"
-                            src="images/arrow-img-right03.png" alt=""></div>
+                    <div class="box02__img">
+                        <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                            class="lazyload" data-src="images/box02-img03.jpg" alt="">
+                        <img class="tt-arrow" src="images/arrow-img-right03.png" alt="">
+                    </div>
+
                     <div class="box02__content">
                         <div class="title-block">
                             <div class="title-block__label">[ Our History ]</div>
                             <h4 class="title-block__title">Laundry & Dry Cleaning Foundation</h4>
                         </div>
-                        <p>Founded in 1990, we follow a dream and an We aim to serve our customers in a way that far
-                            exceeds expectation. Being one of the leading laundry service providers, we know our
-                            customers’ mindset. It is not easy to come home from a hectic day at the office and rush
-                            to the nearest laundry service with your clothes. So, we have an array of services to
-                            make things easy for you.</p>
-                        <p>You need not tolerate late deliveries, low standard of work merged with high prices. Our
-                            services cater to all your laundering and ironing, dry cleaning, shoe repairs,
-                            upholstery cleaning, etc.</p>
+
+                        <p>
+                            Our journey began with a simple vision: to serve our customers beyond expectations.
+                            We understand how busy daily life can be, and how inconvenient it is to worry about laundry
+                            after a long day.
+                        </p>
+
+                        <p>
+                            That is why we provide dependable laundry and dry-cleaning services you can trust.
+                            From washing and ironing to shoe care and upholstery cleaning, we deliver consistent
+                            quality,
+                            timely service, and professional care every step of the way.
+                        </p>
                     </div>
                 </div>
             </div>
-            <div class="section-inner">
+
+            {{-- <div class="section-inner">
                 <div class="container container-fluid-lg">
                     <div class="title-block text-center">
                         <div class="title-block__label">[ Our Team ]</div>
@@ -228,7 +255,7 @@
                             </a></div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </x-guest-layout>
