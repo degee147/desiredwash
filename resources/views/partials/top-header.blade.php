@@ -73,11 +73,12 @@
                                 <div class="tt-obj__badge">2</div>
                             </a></div>
                     </div> --}}
-                    <div class="tt-col__item d-none d-md-block"><a href="#" class="tt-btn" data-toggle="modal"
-                            data-target="#modalMRequestQuote"><span class="mask">Schedule a
-                                Pickup</span>
+                    <div class="tt-col__item d-none d-md-block">
+                        <a href="#" class="tt-btn" data-toggle="modal" data-target="#modalMRequestQuote"><span
+                                class="mask">Schedule a Pickup</span>
                             <div class="button">Schedule a Pickup</div>
-                        </a></div>
+                        </a>
+                    </div>
                     <div class="tt-col__item toggle-wrapper"><a href="#" id="tt-menu-toggle"
                             class="icons-1828859"></a></div>
                 </div>

@@ -54,7 +54,7 @@
                             </div>
 
                             <div class="promo03__show-btn">
-                                <a href="#" class="tt-btn">
+                                <a href="#" class="tt-btn" data-toggle="modal" data-target="#modalMRequestQuote">
                                     <span class="mask">Order Now</span>
                                     <div class="button">Order Now</div>
                                 </a>
