@@ -16,12 +16,13 @@
                 <div class="col-md-4">
                     <h6 class="f-title">Contacts</h6>
                     <ul class="f-info">
-                        <li><i class="icons-484169"></i> 8494 Signal Hill Road Manassas, VA, 20110</li>
-                        <li><i class="icons-59252"></i> Mon-Fri: 8am - 5pm<br>Sat-Sun: 10am - 5pm</li>
-                        <li><a href="mailto:info@yourlaundrysite.com"><i class="icons-1004017"></i>
-                                info@yourlaundrysite.com</a></li>
-                        <li><strong><a href="tel:1(800)765-43-21"><i class="icons-4839471"></i> 1 (800)
-                                    765-43-21</a></strong></li>
+                        <li><i class="icons-484169"></i> 189 Peter Odili road, Trans Amadi, Port Harcourt, Rivers State
+                        </li>
+                        <li><i class="icons-59252"></i> Mon-Sat: 8am - 5pm</li>
+                        <li><a href="mailto:info@desiredwash.com"><i class="icons-1004017"></i>
+                                info@desiredwash.com</a></li>
+                        <li><strong><a href="tel:09053083000"><i class="icons-4839471"></i> 09053083000</a></strong>
+                        </li>
                     </ul>
                 </div>
                 <div class="col-md-4">

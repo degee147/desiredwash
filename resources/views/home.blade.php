@@ -43,19 +43,18 @@
                                 <li>Best Quality</li>
                             </ul>
                         </div>
-                        <div class="col-lg-6"><a href="tel:1(800)765-43-21" class="info01">
+                        <div class="col-lg-6"><a href="tel:09053083000" class="info01">
                                 <div class="info01__icon"><i class="icons-483947"></i></div>
                                 <div class="info01__content">
                                     <div class="info01__title">Call for Quality Services</div>
-                                    <address>1 (800) 765-43-21</address>
+                                    <address>09053083000</address>
                                 </div>
                             </a></div>
                     </div>
                 </div>
             </div>
             <div class="added-info added-info__top row no-gutters-row js-init-carusel-tablet slick-default"><a
-                    href="https://websmirno.site/viktor/prolaundry/contact-areas.html"
-                    class="added-info__item col-md-4">
+                    href="{{ route('contact') }}" class="added-info__item col-md-4">
                     <div class="added-info__icon icons-806765"></div>
                     <div class="added-info__description">
                         <h6 class="added-info__title"><span>Save Time & Money</span></h6>No more wasted time
@@ -297,7 +296,8 @@
                             Give yourself one less thing to worry about and try our residential wash and fold
                             service that includes pick up and delivery.</p>
                         <p>We have been in the laundry business for more than 12 years and would love to earn your
-                            business. Try us today and save $10 Off your first laundry service of 20 pounds or more.
+                            business. Try DesiredWash today and enjoy a special discount on your first laundry service
+                            of 20kg or more.
                         </p><a href="#" class="tt-btn tt-btn__top" data-toggle="modal"
                             data-target="#modalMRequestQuote"><span class="mask">Get Service Now</span>
                             <div class="button">Get Service Now</div>
@@ -886,7 +886,7 @@
                             class="tt-base-color">Collection &amp; Delivery</span></h6>
                     <p>It is our goal to offer you the best possible laundry<br>and dry cleaning service available.
                     </p>
-                    <address><a href="tel:1(800)7654321">1 (800) 765-43-21</a></address>
+                    <address><a href="tel:09053083000">09053083000</a></address>
                 </div>
                 <div class="tt-promo__img"><img
                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAmkAAAFiAQMAAACXkN3PAAAABlBMVEUAAADq6urlXPy5AAAAAnRSTlMAAQGU/a4AAAA0SURBVHja7cExDQAAAAIgT/snNocbEAAAAAAAAAAAAAAAAAAAAOBJAwAAAAAAAAAAAABwa9XlAAnqWLNnAAAAAElFTkSuQmCC"
@@ -897,11 +897,12 @@
             </div>
         </div>
     </div>
-    <div id="map" class="lazyload" data-bg="images/map-index.jpg"><iframe
-            src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" class="lazyload"
-            data-expand="-220"
-            data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3111.5820008392016!2d-77.45701318432829!3d38.75035326320268!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89b65b93b943fb07%3A0xc8712e829da92b9e!2sHistoric%20District%2C%208494%20Signal%20Hill%20Rd%2C%20Manassas%2C%20VA%2020110%2C%20USA!5e0!3m2!1sen!2sua!4v1605172763191!5m2!1sen!2sua"
-            allowfullscreen="" aria-hidden="false"></iframe></div>
+    <div id="map" class="lazyload" data-bg="">
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3975.8298978942444!2d7.046488573966028!3d4.7992393407975795!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1069cdbfd133a985%3A0xfae0fc556c2f50fa!2sDesired%20Laundry%20%26%20Dry%20Cleaning%20Services!5e0!3m2!1sen!2sng!4v1768471663319!5m2!1sen!2sng"
+            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
 
 
 </x-guest-layout>

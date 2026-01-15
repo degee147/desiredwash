@@ -4,18 +4,18 @@
             <div class="col-auto">
                 <div class="h-info01">
                     <div class="tt-item">
-                        <address>8494 Signal Hill Road Manassas, VA, 20110</address>
+                        <address>189 Peter Odili road, Trans Amadi, Port Harcourt, Rivers State</address>
                     </div>
-                    <div class="tt-item">Mon-Fri 08:00 AM - 05:00 PM</div>
-                    <div class="tt-item"><a href="mailto:info@santizex-site.com">info@yourcompany.com</a></div>
+                    <div class="tt-item">Mon-Sat 08:00 AM - 05:00 PM</div>
+                    <div class="tt-item"><a href="mailto:info@santizex-site.com">info@desiredwash.com</a></div>
                 </div>
             </div>
             <div class="col-auto ml-auto">
                 <div class="tt-obj">
                     <div class="h-info02">
                         <div class="tt-item">
-                            <address><a href="tel:1(800)765-43-21"><span class="icons-483947"></span> 1 (800)
-                                    765-43-21</a></address>
+                            <address><a href="tel:09053083000"><span class="icons-483947"></span> 09053083000</a>
+                            </address>
                         </div>
                     </div>
                 </div>
@@ -55,8 +55,8 @@
                     <div class="tt-col__item d-block d-lg-none">
                         <div class="h-info02">
                             <div class="tt-item">
-                                <address><a href="tel:1(800)7654321"><span class="icons-483947"></span> 1 (800)
-                                        765-43-21</a></address>
+                                <address><a href="tel:09053083000"><span class="icons-483947"></span> 09053083000</a>
+                                </address>
                             </div>
                         </div>
                     </div>

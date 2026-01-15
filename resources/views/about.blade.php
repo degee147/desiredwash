@@ -91,12 +91,12 @@
                                 <div class="title-block__label">[ Our Guarantee ]</div>
                                 <h4 class="title-block__title">The Best Guarantee<br>in the Business</h4>
                             </div>
-                            <p>The most trusted brand in clothing care since 2011. We will do everything we can to
-                                return your clothes to you in great shape. In the rare instance that an item goes
-                                missing or is damaged during the cleaning process, we’ll reimburse you up to the
-                                full value of the item with a $1,000 maximum per order.</p><a
-                                href="{{ route('about') }}#" class="tt-btn tt-btn__top" data-toggle="modal"
-                                data-target="#modalMRequestQuote"><span class="mask">Get Service Now</span>
+                            <p>The most trusted brand in clothing care since 2018. At DesiredWash, we take every
+                                possible step to return your clothes in excellent condition. In the rare event that an
+                                item is lost or damaged during the cleaning process, we offer fair compensation, subject
+                                to our service terms, to ensure your peace of mind.</p><a href="{{ route('about') }}"
+                                class="tt-btn tt-btn__top" data-toggle="modal" data-target="#modalMRequestQuote"><span
+                                    class="mask">Get Service Now</span>
                                 <div class="button">Get Service Now</div>
                             </a>
                         </div>
@@ -109,8 +109,7 @@
                         <div class="title-block__label">[ Our Advantages ]</div>
                         <h4 class="title-block__title">Why Choose Us</h4>
                     </div>
-                    <div class="added-info02 row"><a href="https://websmirno.site/viktor/prolaundry/contact-areas.html"
-                            class="added-info02__item col-md-4">
+                    <div class="added-info02 row"><a href="{{ route('contact') }}" class="added-info02__item col-md-4">
                             <div class="added-info02__icon icons-bright-lightbulb"></div>
                             <div class="added-info02__description">
                                 <h6 class="added-info02__title"><span>Persionalized Experience</span></h6>We take
