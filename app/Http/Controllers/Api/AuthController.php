@@ -31,7 +31,7 @@ class AuthController extends Controller
             'password' => $data['password'],
             'phone' => $data['phone'] ?? null,
             'auth_provider' => 'email',
-            'zone_id' => "z11", // Default zone for new users
+            // 'zone_id' => "z11", // Default zone for new users
         ]);
 
         $token = $user->createToken('api')->plainTextToken;
