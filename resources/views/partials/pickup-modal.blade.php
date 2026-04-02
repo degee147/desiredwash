@@ -23,11 +23,11 @@
                             id="modalAddress" placeholder="Address *"></div>
                     <div class="form-group">
                         <div class="custom-select"><select name="typeofholiday" class="tt-select">
-                                <option value="Service">Service</option>
-                                <option value="Service 02">Service 02</option>
-                                <option value="Service 03">Service 03</option>
-                                <option value="Service 04">Service 04</option>
-                                <option value="Service 05">Service 05</option>
+                                <option value="Laundry">Laundry</option>
+                                <option value="Dry Cleaning">Dry Cleaning</option>
+                                <option value="Ironing">Ironing</option>
+                                <option value="Pick Up & Delivery">Pick Up & Delivery</option>
+                                <option value="Stain Removal">Stain Removal</option>
                             </select></div>
                     </div>
                     <div class="row">

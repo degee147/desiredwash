@@ -14,19 +14,19 @@
                         src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                         data-src="images/arrow-img-right.png" alt="">
                     <div class="box01__img-label">
-                        <div class="tt-text01">10</div>years of<br>experience
+                        <div class="tt-text01">12</div>years of<br>experience
                     </div>
                 </div>
                 <div class="box01__content">
                     <div class="title-block">
-                        <div class="title-block__label">More than 10 Years of Experience</div>
+                        <div class="title-block__label">More than 12 Years of Experience</div>
                         <h4 class="title-block__title">We are Passionate About Laundry</h4>
                     </div>
                     <div class="box01__wrapper-img"><img
                             src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                             class="lazyload" data-src="images/img01.jpg" alt="">
                         <div class="box01__img-label">
-                            <div class="tt-text01">25</div>years of<br>experience
+                            <div class="tt-text01">12</div>years of<br>experience
                         </div>
                     </div>
                     <p>We are professionals in the laundry and dry cleaning business, which means we always stay up
@@ -505,9 +505,8 @@
                                     </a><a href="#" class="added-info02__item col-md-4">
                                         <div class="added-info02__icon icons-686308"></div>
                                         <div class="added-info02__description">
-                                            <h6 class="added-info02__title"><span>Happiness Guarantee</span></h6>If
-                                            you're not completely satisfied with the wash or dry cleaning, we will
-                                            re-process your clothes for free!
+                                            <h6 class="added-info02__title"><span>Happiness Guarantee</span></h6>Not
+                                            satisfied? Let us know — we’ll make it right
                                         </div>
                                     </a></div>
                             </div>
