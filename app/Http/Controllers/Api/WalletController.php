@@ -72,7 +72,6 @@ class WalletController extends Controller
             'transaction_ref' => 'required|string',
         ]);
 
-
         $user = $request->user();
 
         // Find transaction
@@ -92,11 +91,28 @@ class WalletController extends Controller
             ]);
         }
 
+
+        if (config('services.flutterwave.env') === 'staging') {
+
+            // Update transaction → triggers model event
+            $transaction->update([
+                'status' => 'completed',
+            ]);
+
+            return response()->json([
+                'new_balance' => (float) $user->fresh()->wallet_balance
+            ]);
+
+
+        }
+
+
+        sleep(10); // wait for FW to update transaction status
         // Get transaction from Flutterwave
         $fwTransaction = $this->flutterwave->getTransactionByRef($data['transaction_ref']);
 
         if (!$fwTransaction) {
-            return response()->json(['message' => 'Transaction not found'], 404);
+            return response()->json(['message' => 'FW Transaction not found'], 404);
         }
 
         $verified = $this->flutterwave->verifyTransaction((string) $fwTransaction['id']);
@@ -112,6 +128,7 @@ class WalletController extends Controller
 
         $amount = (float) $verified['amount'];
 
+
         // Update transaction → triggers model event
         $transaction->update([
             'status' => 'completed',
@@ -120,6 +137,8 @@ class WalletController extends Controller
         return response()->json([
             'new_balance' => (float) $user->fresh()->wallet_balance
         ]);
+
+
     }
 
     // GET /api/v1/wallet/transactions

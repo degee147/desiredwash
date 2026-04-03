@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('wallet_transactions', function (Blueprint $table) {
-            $table->string('processed_at')->default(null)->after('status');
+            $table->timestamp('processed_at')->nullable()->after('status');
         });
     }
 
