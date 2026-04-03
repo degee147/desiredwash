@@ -106,6 +106,7 @@ class OrderController extends Controller
                     'user_id' => $user->id,
                     'type' => 'debit',
                     'amount' => $total,
+                    'status' => "completed",
                     'description' => "Payment for order #{$order->id}",
                     'reference' => $order->id,
                 ]);
@@ -236,6 +237,7 @@ class OrderController extends Controller
                     'user_id' => $user->id,
                     'type' => 'credit',
                     'amount' => $order->total,
+                    'status' => "completed",
                     'description' => "Refund for cancelled order #{$order->id}",
                     'reference' => $order->id,
                 ]);

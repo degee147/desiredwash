@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\WalletTransaction;
 use App\Services\FlutterwaveService;
 use Illuminate\Http\Request;
@@ -17,9 +18,31 @@ class WalletController extends Controller
     // GET /api/v1/wallet/balance
     public function balance(Request $request)
     {
-        return response()->json([
-            'balance' => (float) $request->user()->wallet_balance,
-        ]);
+        $userId = $request->user()->id;
+
+        return DB::transaction(function () use ($userId) {
+
+            $balance = WalletTransaction::where('user_id', $userId)
+                ->where('status', 'completed')
+                ->sum(DB::raw("
+                CASE
+                    WHEN type = 'credit' THEN amount
+                    WHEN type = 'debit' THEN -amount
+                    ELSE 0
+                END
+            "));
+
+            $user = User::where('id', $userId)
+                ->lockForUpdate()
+                ->first();
+
+            $user->wallet_balance = $balance;
+            $user->save();
+
+            return response()->json([
+                'balance' => (float) $balance,
+            ]);
+        });
     }
 
     // POST /api/v1/wallet/topup
