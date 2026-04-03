@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class WalletController extends Controller
 {
-    public function __construct(private FlutterwaveService $flutterwave) {}
+    public function __construct(private FlutterwaveService $flutterwave)
+    {
+    }
 
     // GET /api/v1/wallet/balance
     public function balance(Request $request)
@@ -27,23 +29,25 @@ class WalletController extends Controller
             'amount' => 'required|numeric|min:100',
         ]);
 
-        $user      = $request->user();
+        $user = $request->user();
         $timestamp = now()->timestamp;
-        $txRef     = "wallet_topup_{$user->id}_{$timestamp}";
+        $txRef = "wallet_topup_{$user->id}_{$timestamp}";
 
         $paymentLink = $this->flutterwave->createWalletTopupLink(
             $user->id,
             (float) $data['amount'],
-            $txRef
+            $txRef,
+            $user->email,
+            $user->name
         );
 
-        if (! $paymentLink) {
+        if (!$paymentLink) {
             return response()->json(['message' => 'Could not initiate payment. Please try again.'], 502);
         }
 
         return response()->json([
             'payment_link' => $paymentLink,
-            'reference'    => $txRef,
+            'reference' => $txRef,
         ]);
     }
 
@@ -68,14 +72,14 @@ class WalletController extends Controller
         // Look up and verify the transaction
         $transaction = $this->flutterwave->getTransactionByRef($data['transaction_ref']);
 
-        if (! $transaction) {
+        if (!$transaction) {
             return response()->json(['message' => 'Transaction not found'], 404);
         }
 
         $verified = $this->flutterwave->verifyTransaction((string) $transaction['id']);
 
         if (
-            ! $verified
+            !$verified
             || $verified['status'] !== 'successful'
             || strtoupper($verified['currency']) !== 'NGN'
         ) {
@@ -88,11 +92,11 @@ class WalletController extends Controller
             $user->increment('wallet_balance', $amount);
 
             WalletTransaction::create([
-                'user_id'     => $user->id,
-                'type'        => 'credit',
-                'amount'      => $amount,
+                'user_id' => $user->id,
+                'type' => 'credit',
+                'amount' => $amount,
                 'description' => 'Wallet top-up',
-                'reference'   => $data['transaction_ref'],
+                'reference' => $data['transaction_ref'],
             ]);
 
             return (float) $user->fresh()->wallet_balance;

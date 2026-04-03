@@ -23,19 +23,19 @@ class FlutterwaveService
     public function createOrderPaymentLink(array $order, string $txRef): ?string
     {
         $payload = [
-            'tx_ref'       => $txRef,
-            'amount'       => $order['total'],
-            'currency'     => 'NGN',
+            'tx_ref' => $txRef,
+            'amount' => $order['total'],
+            'currency' => 'NGN',
             'redirect_url' => "desiredwash://payment/success?tx_ref={$txRef}",
-            'cancel_url'   => 'desiredwash://payment/cancel',
-            'customer'     => [
+            'cancel_url' => 'desiredwash://payment/cancel',
+            'customer' => [
                 'email' => $order['user_email'],
-                'name'  => $order['user_name'],
+                'name' => $order['user_name'],
             ],
             'customizations' => [
-                'title'       => 'DesiredWash Order',
+                'title' => 'DesiredWash Order',
                 'description' => 'Laundry service payment',
-                'logo'        => config('app.url') . '/logo.png',
+                'logo' => config('app.url') . '/logo.png',
             ],
         ];
 
@@ -45,26 +45,47 @@ class FlutterwaveService
     /**
      * Generate a Flutterwave payment link for a wallet top-up.
      */
-    public function createWalletTopupLink(int $userId, float $amount, string $txRef): ?string
+    public function createWalletTopupLink(int $userId, float $amount, string $txRef, string $email, string $name): ?string
     {
         $payload = [
-            'tx_ref'       => $txRef,
-            'amount'       => $amount,
-            'currency'     => 'NGN',
+            'tx_ref' => $txRef,
+            'amount' => $amount,
+            'currency' => 'NGN',
             'redirect_url' => "desiredwash://wallet/success?tx_ref={$txRef}",
-            'customer'     => [
-                'email' => '', // filled by caller if available
-                'name'  => "User #{$userId}",
+            'cancel_url' => "desiredwash://wallet/cancel",
+            'customer' => [
+                'email' => $email,
+                'name' => $name,
             ],
             'customizations' => [
-                'title'       => 'DesiredWash Wallet',
+                'title' => 'DesiredWash Wallet',
                 'description' => 'Wallet top-up',
-                'logo'        => config('app.url') . '/logo.png',
+                'logo' => config('app.url') . '/logo.png',
             ],
         ];
 
         return $this->initiatePayment($payload);
     }
+    // public function createWalletTopupLink(int $userId, float $amount, string $txRef): ?string
+    // {
+    //     $payload = [
+    //         'tx_ref' => $txRef,
+    //         'amount' => $amount,
+    //         'currency' => 'NGN',
+    //         'redirect_url' => "desiredwash://wallet/success?tx_ref={$txRef}",
+    //         'customer' => [
+    //             'email' => '', // filled by caller if available
+    //             'name' => "User #{$userId}",
+    //         ],
+    //         'customizations' => [
+    //             'title' => 'DesiredWash Wallet',
+    //             'description' => 'Wallet top-up',
+    //             'logo' => config('app.url') . '/logo.png',
+    //         ],
+    //     ];
+
+    //     return $this->initiatePayment($payload);
+    // }
 
     /**
      * Initiate a payment and return the hosted link.
@@ -80,7 +101,7 @@ class FlutterwaveService
             }
 
             Log::error('Flutterwave payment initiation failed', [
-                'payload'  => $payload,
+                'payload' => $payload,
                 'response' => $response->json(),
             ]);
 
@@ -106,7 +127,7 @@ class FlutterwaveService
 
             Log::error('Flutterwave verification failed', [
                 'transaction_id' => $transactionId,
-                'response'       => $response->json(),
+                'response' => $response->json(),
             ]);
 
             return null;
