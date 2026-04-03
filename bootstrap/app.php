@@ -13,7 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->validateCsrfTokens(except: [
+            'api/v1/payments/webhook',
+        ]);
+        $middleware->statefulApi(); // keeps sanctum working on other routes
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -24,9 +24,8 @@ Route::prefix('auth')->group(function () {
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
 });
 
-// ── Zones (public) ────────────────────────────────────────────────────────
+// ── Public ────────────────────────────────────────────────────────────────
 Route::get('zones', [ZoneController::class, 'index']);
-
 Route::get('services', [ServicesController::class, 'index']);
 
 // ── Flutterwave webhook (public — verified by verif-hash header) ──────────
@@ -34,6 +33,9 @@ Route::post('webhooks/flutterwave', [WebhookController::class, 'handle']);
 
 // ── Authenticated routes ──────────────────────────────────────────────────
 Route::middleware('auth:sanctum')->group(function () {
+
+    // Auth
+    Route::post('auth/logout', [AuthController::class, 'logout']);
 
     // Profile
     Route::get('profile', [ProfileController::class, 'show']);
@@ -46,6 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('orders/{id}/cancel', [OrderController::class, 'cancel']);
 
     // Payments
+    Route::post('payments/initiate', [PaymentController::class, 'initiate']);
     Route::post('payments/verify', [PaymentController::class, 'verify']);
 
     // Wallet
