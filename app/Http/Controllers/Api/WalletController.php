@@ -40,7 +40,7 @@ class WalletController extends Controller
             'type' => 'credit',
             'status' => 'pending',
             'amount' => $data['amount'],
-            'description' => 'Wallet top-up (pending)',
+            'description' => 'Wallet top-up',
             'reference' => $txRef,
         ]);
 
