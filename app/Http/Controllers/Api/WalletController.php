@@ -72,12 +72,14 @@ class WalletController extends Controller
             'transaction_ref' => 'required|string',
         ]);
 
+
         $user = $request->user();
 
         // Find transaction
         $transaction = WalletTransaction::where('reference', $data['transaction_ref'])
             ->where('user_id', $user->id)
             ->first();
+
 
         if (!$transaction) {
             return response()->json(['message' => 'Transaction not found'], 404);
@@ -98,6 +100,7 @@ class WalletController extends Controller
         }
 
         $verified = $this->flutterwave->verifyTransaction((string) $fwTransaction['id']);
+
 
         if (
             !$verified ||
