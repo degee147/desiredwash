@@ -30,9 +30,21 @@ class WalletController extends Controller
         ]);
 
         $user = $request->user();
+
         $timestamp = now()->timestamp;
         $txRef = "wallet_topup_{$user->id}_{$timestamp}";
 
+        // ✅ Create PENDING transaction
+        WalletTransaction::create([
+            'user_id' => $user->id,
+            'type' => 'credit',
+            'status' => 'pending',
+            'amount' => $data['amount'],
+            'description' => 'Wallet top-up (pending)',
+            'reference' => $txRef,
+        ]);
+
+        // Generate payment link
         $paymentLink = $this->flutterwave->createWalletTopupLink(
             $user->id,
             (float) $data['amount'],
@@ -42,7 +54,9 @@ class WalletController extends Controller
         );
 
         if (!$paymentLink) {
-            return response()->json(['message' => 'Could not initiate payment. Please try again.'], 502);
+            return response()->json([
+                'message' => 'Could not initiate payment. Please try again.'
+            ], 502);
         }
 
         return response()->json([
@@ -60,49 +74,49 @@ class WalletController extends Controller
 
         $user = $request->user();
 
-        // Prevent double-crediting
-        $alreadyProcessed = WalletTransaction::where('reference', $data['transaction_ref'])
+        // Find transaction
+        $transaction = WalletTransaction::where('reference', $data['transaction_ref'])
             ->where('user_id', $user->id)
-            ->exists();
-
-        if ($alreadyProcessed) {
-            return response()->json(['new_balance' => (float) $user->wallet_balance]);
-        }
-
-        // Look up and verify the transaction
-        $transaction = $this->flutterwave->getTransactionByRef($data['transaction_ref']);
+            ->first();
 
         if (!$transaction) {
             return response()->json(['message' => 'Transaction not found'], 404);
         }
 
-        $verified = $this->flutterwave->verifyTransaction((string) $transaction['id']);
+        // Prevent double processing
+        if ($transaction->status === 'completed') {
+            return response()->json([
+                'new_balance' => (float) $user->wallet_balance
+            ]);
+        }
+
+        // Get transaction from Flutterwave
+        $fwTransaction = $this->flutterwave->getTransactionByRef($data['transaction_ref']);
+
+        if (!$fwTransaction) {
+            return response()->json(['message' => 'Transaction not found'], 404);
+        }
+
+        $verified = $this->flutterwave->verifyTransaction((string) $fwTransaction['id']);
 
         if (
-            !$verified
-            || $verified['status'] !== 'successful'
-            || strtoupper($verified['currency']) !== 'NGN'
+            !$verified ||
+            $verified['status'] !== 'successful' ||
+            strtoupper($verified['currency']) !== 'NGN'
         ) {
             return response()->json(['message' => 'Payment verification failed'], 402);
         }
 
         $amount = (float) $verified['amount'];
 
-        $newBalance = DB::transaction(function () use ($user, $amount, $data) {
-            $user->increment('wallet_balance', $amount);
+        // Update transaction → triggers model event
+        $transaction->update([
+            'status' => 'completed',
+        ]);
 
-            WalletTransaction::create([
-                'user_id' => $user->id,
-                'type' => 'credit',
-                'amount' => $amount,
-                'description' => 'Wallet top-up',
-                'reference' => $data['transaction_ref'],
-            ]);
-
-            return (float) $user->fresh()->wallet_balance;
-        });
-
-        return response()->json(['new_balance' => $newBalance]);
+        return response()->json([
+            'new_balance' => (float) $user->fresh()->wallet_balance
+        ]);
     }
 
     // GET /api/v1/wallet/transactions

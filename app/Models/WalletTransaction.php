@@ -12,36 +12,53 @@ class WalletTransaction extends Model
     protected $fillable = [
         'id',
         'user_id',
-        'type',
+        'type',        // credit | debit
+        'status',      // pending | completed | failed
         'amount',
         'description',
         'reference',
+        'processed_at',
     ];
 
     protected $casts = [
         'amount' => 'decimal:2',
+        'processed_at' => 'datetime',
     ];
 
     protected static function booted()
     {
-        static::created(function ($transaction) {
+        static::updated(function ($transaction) {
 
-            $user = $transaction->user()->lockForUpdate()->first();
+            // Only process when status changes to completed
+            if (
+                $transaction->wasChanged('status') &&
+                $transaction->status === 'completed'
+            ) {
+                $user = $transaction->user()->lockForUpdate()->first();
 
-            if (!$user) {
-                throw new \Exception('Wallet transaction user not found');
-            }
-
-            if ($transaction->type === 'debit') {
-                if ((float) $user->wallet_balance < (float) $transaction->amount) {
-                    throw new \Exception('Insufficient wallet balance');
+                if (!$user) {
+                    throw new \Exception('Wallet transaction user not found');
                 }
 
-                $user->decrement('wallet_balance', $transaction->amount);
-            }
+                // Prevent double processing
+                if ($transaction->processed_at) {
+                    return;
+                }
 
-            if ($transaction->type === 'credit') {
-                $user->increment('wallet_balance', $transaction->amount);
+                if ($transaction->type === 'debit') {
+                    if ((float) $user->wallet_balance < (float) $transaction->amount) {
+                        throw new \Exception('Insufficient wallet balance');
+                    }
+
+                    $user->decrement('wallet_balance', $transaction->amount);
+                }
+
+                if ($transaction->type === 'credit') {
+                    $user->increment('wallet_balance', $transaction->amount);
+                }
+
+                $transaction->processed_at = now();
+                $transaction->saveQuietly();
             }
         });
     }
@@ -57,9 +74,11 @@ class WalletTransaction extends Model
             'id' => $this->id,
             'user_id' => $this->user_id,
             'type' => $this->type,
+            'status' => $this->status,
             'amount' => (float) $this->amount,
             'description' => $this->description,
             'reference' => $this->reference,
+            'processed_at' => $this->processed_at?->toIso8601String(),
             'created_at' => $this->created_at?->toIso8601String(),
         ];
     }
