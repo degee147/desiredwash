@@ -17,6 +17,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'sa',
+        'admin',
+        'support',
         'phone',
         'address',
         'wallet_balance',
@@ -36,7 +39,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'wallet_balance' => 'decimal:2',
+            'sa' => 'boolean',
+            'admin' => 'boolean',
+            'support' => 'boolean'
         ];
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return (bool) $this->sa;
+    }
+
+    public function isAdmin(): bool
+    {
+        return (bool) $this->admin or (bool) $this->sa;
+    }
+
+    public function isSupport(): bool
+    {
+        return (bool) $this->support or (bool) $this->sa or (bool) $this->admin;
     }
 
     public function orders()
