@@ -154,33 +154,6 @@ class OrderController extends Controller
     }
 
 
-
-    public function all(Request $request)
-    {
-        $query = Order::query()->latest();
-
-        // Optional filters
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        if ($request->filled('payment_status')) {
-            $query->where('payment_status', $request->payment_status);
-        }
-
-        // Pagination (default 10 per page)
-        $orders = $query->paginate($request->get('per_page', 10));
-
-        return response()->json([
-            'data' => collect($orders->items())->map(fn($o) => $o->toApiArray()),
-            'meta' => [
-                'current_page' => $orders->currentPage(),
-                'last_page' => $orders->lastPage(),
-                'per_page' => $orders->perPage(),
-                'total' => $orders->total(),
-            ],
-        ]);
-    }
     // GET /api/v1/orders
     public function index(Request $request)
     {

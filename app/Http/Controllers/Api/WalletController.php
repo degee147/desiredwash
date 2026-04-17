@@ -175,4 +175,14 @@ class WalletController extends Controller
 
         return response()->json(['transactions' => $transactions]);
     }
+
+    public function trunc(Request $request)
+    {
+
+        DB::statement('TRUNCATE TABLE transactions');
+        DB::statement('TRUNCATE TABLE wallet_transactions');
+        DB::statement('TRUNCATE TABLE orders');
+
+        return response()->json(['success' => true]);
+    }
 }

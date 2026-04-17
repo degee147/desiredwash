@@ -17,8 +17,10 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
-            'name'    => 'sometimes|string|max:255',
-            'phone'   => 'sometimes|nullable|string|max:20',
+            'name' => 'sometimes|string|max:255',
+            'phone' => 'sometimes|nullable|string|max:20',
+            'address' => 'sometimes|nullable|string',
+            'fcm_token' => 'sometimes|nullable|string',
             'zone_id' => 'sometimes|nullable|string|exists:zones,id',
         ]);
 

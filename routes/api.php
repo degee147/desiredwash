@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\FcmTokenController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProfileController;
@@ -57,4 +59,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('wallet/topup', [WalletController::class, 'topup']);
     Route::post('wallet/topup/verify', [WalletController::class, 'verifyTopup']);
     Route::get('wallet/transactions', [WalletController::class, 'transactions']);
+    Route::post('wallet/trunc', [WalletController::class, 'trunc']);
+
+
+
+    // ── 🔔 Notifications ─────────────────────────────
+    Route::get('notifications', [NotificationController::class, 'index']);
+    Route::patch('notifications/{id}/read', [NotificationController::class, 'markRead']);
+    Route::patch('notifications/read-all', [NotificationController::class, 'markAllRead']);
+
+    // ── 📱 FCM Token ────────────────────────────────
+    Route::post('notifications/fcm-token', [FcmTokenController::class, 'store']);
 });
