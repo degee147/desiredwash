@@ -201,6 +201,83 @@ class OrderController extends Controller
         return response()->json(['order' => $order->toApiArray()]);
     }
 
+    // POST /api/v1/orders/:id/pay
+    public function pay(Request $request, string $id)
+    {
+        $data = $request->validate([
+            'payment_method' => 'required|in:wallet,card',
+        ]);
+
+        $order = $request->user()->orders()->findOrFail($id);
+
+        // Only allow paying for orders that are still awaiting payment
+        if ($order->payment_status === 'success') {
+            return response()->json(['message' => 'This order has already been paid'], 422);
+        }
+
+        if ($order->status === 'cancelled') {
+            return response()->json(['message' => 'Cannot pay for a cancelled order'], 422);
+        }
+
+        $user = $request->user();
+
+        // ==========================================
+        // WALLET PAYMENT
+        // ==========================================
+        if ($data['payment_method'] === 'wallet') {
+
+            if ((float) $user->wallet_balance < (float) $order->total) {
+                return response()->json(['message' => 'Insufficient wallet balance'], 402);
+            }
+
+            return DB::transaction(function () use ($user, $order) {
+
+                $order->update([
+                    'payment_method' => 'wallet',
+                    'payment_status' => 'success',
+                    'status' => 'confirmed',
+                ]);
+
+                WalletTransaction::create([
+                    'user_id' => $user->id,
+                    'type' => 'debit',
+                    'amount' => $order->total,
+                    'status' => 'completed',
+                    'description' => "Payment for order #{$order->id}",
+                    'reference' => $order->id,
+                ]);
+
+                $this->appContextService->updateUserBalance($user->id);
+
+                // 🔔 Notify: order confirmed + payment success
+                $ref = strtoupper(substr($order->id, 0, 8));
+                $this->notifications->orderConfirmed($user->id, $order->id, $ref);
+                $this->notifications->paymentSuccess($user->id, $order->total, $ref);
+
+                return response()->json([
+                    'order' => $order->fresh()->toApiArray(),
+                    'payment_link' => null,
+                ]);
+            });
+        }
+
+        // ==========================================
+        // CARD PAYMENT — generate a fresh Flutterwave link
+        // ==========================================
+        $order->update(['payment_method' => 'card']);
+
+        $paymentLink = $this->flutterwave->createOrderPaymentLink([
+            'total' => $order->total,
+            'user_email' => $user->email,
+            'user_name' => $user->name,
+        ], $order->id);
+
+        return response()->json([
+            'order' => $order->fresh()->toApiArray(),
+            'payment_link' => $paymentLink,
+        ]);
+    }
+
     // POST /api/v1/orders/:id/cancel
     public function cancel(Request $request, string $id)
     {
@@ -215,7 +292,6 @@ class OrderController extends Controller
 
             if ($order->payment_method === 'wallet' && $order->payment_status === 'success') {
                 $user = $request->user();
-                // $user->increment('wallet_balance', $order->total);
 
                 WalletTransaction::create([
                     'user_id' => $user->id,
@@ -226,7 +302,7 @@ class OrderController extends Controller
                     'reference' => $order->id,
                 ]);
 
-                $balance = $this->appContextService->updateUserBalance($user->iId);
+                $this->appContextService->updateUserBalance($user->id);
             }
         });
 
