@@ -41,4 +41,8 @@ return [
         'secret_hash' => env('FLUTTERWAVE_SECRET_HASH'),
         'env' => env('FLW_ENV'),
     ],
+
+    'firebase' => [
+        'credentials' => env('FIREBASE_CREDENTIALS', 'firebase-service-account.json'),
+    ],
 ];

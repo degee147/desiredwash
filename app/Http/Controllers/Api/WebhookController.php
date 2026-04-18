@@ -6,13 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\WalletTransaction;
 use App\Services\FlutterwaveService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class WebhookController extends Controller
 {
-    public function __construct(private FlutterwaveService $flutterwave) {}
+    public function __construct(
+        private FlutterwaveService $flutterwave,
+        private NotificationService $notifications,
+    ) {
+    }
 
     // POST /api/v1/webhooks/flutterwave
     public function handle(Request $request)
@@ -25,7 +30,7 @@ class WebhookController extends Controller
         }
 
         $payload = $request->all();
-        $event   = $payload['event'] ?? null;
+        $event = $payload['event'] ?? null;
 
         Log::info('Flutterwave webhook received', ['event' => $event]);
 
@@ -34,17 +39,17 @@ class WebhookController extends Controller
         }
 
         $txData = $payload['data'] ?? [];
-        $txRef  = $txData['tx_ref'] ?? null;
+        $txRef = $txData['tx_ref'] ?? null;
         $status = $txData['status'] ?? null;
 
-        if ($status !== 'successful' || ! $txRef) {
+        if ($status !== 'successful' || !$txRef) {
             return response()->json(['message' => 'Not a successful charge']);
         }
 
         // Server-side verification
         $verified = $this->flutterwave->verifyTransaction((string) $txData['id']);
 
-        if (! $verified || $verified['status'] !== 'successful') {
+        if (!$verified || $verified['status'] !== 'successful') {
             Log::error('Flutterwave webhook: verification failed', ['tx_ref' => $txRef]);
             return response()->json(['message' => 'Verification failed'], 422);
         }
@@ -64,40 +69,45 @@ class WebhookController extends Controller
     private function processWalletTopup(string $txRef, float $amount): void
     {
         // Parse user_id from wallet_topup_{user_id}_{timestamp}
-        $parts  = explode('_', $txRef);
+        $parts = explode('_', $txRef);
         $userId = $parts[2] ?? null;
 
-        if (! $userId) {
+        if (!$userId) {
             Log::error('Webhook: could not parse user_id from wallet topup ref', ['tx_ref' => $txRef]);
             return;
         }
 
         $alreadyDone = WalletTransaction::where('reference', $txRef)->exists();
-        if ($alreadyDone) return;
+        if ($alreadyDone)
+            return;
 
         DB::transaction(function () use ($userId, $amount, $txRef) {
             \App\Models\User::where('id', $userId)->increment('wallet_balance', $amount);
 
             WalletTransaction::create([
-                'user_id'     => $userId,
-                'type'        => 'credit',
-                'amount'      => $amount,
+                'user_id' => $userId,
+                'type' => 'credit',
+                'amount' => $amount,
                 'description' => 'Wallet top-up',
-                'reference'   => $txRef,
+                'reference' => $txRef,
             ]);
         });
+
+        // 🔔 Notify: wallet credited
+        $this->notifications->walletTopup((int) $userId, $amount);
     }
 
     private function processOrderPayment(string $orderId, float $amount): void
     {
         $order = Order::find($orderId);
 
-        if (! $order) {
+        if (!$order) {
             Log::error('Webhook: order not found', ['order_id' => $orderId]);
             return;
         }
 
-        if ($order->payment_status === 'success') return;
+        if ($order->payment_status === 'success')
+            return;
 
         if ($amount < (float) $order->total) {
             Log::error('Webhook: payment amount mismatch', [
@@ -109,9 +119,14 @@ class WebhookController extends Controller
         }
 
         $order->update([
-            'payment_status'    => 'success',
-            'status'            => 'confirmed',
+            'payment_status' => 'success',
+            'status' => 'confirmed',
             'payment_reference' => $orderId,
         ]);
+
+        // 🔔 Notify: order confirmed + payment received (card/bank)
+        $ref = strtoupper(substr($order->id, 0, 8));
+        $this->notifications->orderConfirmed($order->user_id, $order->id, $ref);
+        $this->notifications->paymentSuccess($order->user_id, (float) $order->total, $ref);
     }
 }

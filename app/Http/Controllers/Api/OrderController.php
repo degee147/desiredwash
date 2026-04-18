@@ -8,14 +8,17 @@ use App\Models\Service;
 use App\Models\WalletTransaction;
 use App\Models\Zone;
 use App\Services\FlutterwaveService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
-    public function __construct(private FlutterwaveService $flutterwave)
-    {
+    public function __construct(
+        private FlutterwaveService $flutterwave,
+        private NotificationService $notifications,
+    ) {
     }
 
     // POST /api/v1/orders
@@ -110,6 +113,11 @@ class OrderController extends Controller
                     'description' => "Payment for order #{$order->id}",
                     'reference' => $order->id,
                 ]);
+
+                // 🔔 Notify: order confirmed + payment success (wallet)
+                $ref = strtoupper(substr($order->id, 0, 8));
+                $this->notifications->orderConfirmed($user->id, $order->id, $ref);
+                $this->notifications->paymentSuccess($user->id, $total, $ref);
 
                 return response()->json([
                     'order' => $order->toApiArray(),
@@ -216,6 +224,11 @@ class OrderController extends Controller
                 ]);
             }
         });
+
+        // 🔔 Notify: order cancelled
+        $wasWalletRefund = $order->payment_method === 'wallet' && $order->payment_status === 'success';
+        $ref = strtoupper(substr($order->id, 0, 8));
+        $this->notifications->orderCancelled($request->user()->id, $ref, $wasWalletRefund);
 
         return response()->json(['order' => $order->fresh()->toApiArray()]);
     }

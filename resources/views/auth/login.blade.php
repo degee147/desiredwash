@@ -4,7 +4,7 @@
     <!--=====================================-->
     <!--=       breadcrumb Area Start       =-->
     <!--=====================================-->
-    <section class="breadcrumb-wrap-layout1 bg-color-old-lace">
+    {{-- <section class="breadcrumb-wrap-layout1 bg-color-old-lace">
         <div class="container">
             <div class="breadcrumb-layout1">
                 <nav aria-label="breadcrumb">
@@ -15,7 +15,7 @@
                 </nav>
             </div>
         </div>
-    </section>
+    </section> --}}
     @if (false)
         <section class="newsletter-wrap-layout1 space-top-60 space-bottom-60 bg-color-light-1 transition-default">
             <div class="container">

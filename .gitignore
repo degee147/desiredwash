@@ -37,3 +37,4 @@ php.ini
 .well-known
 /.well-known
 /cgi-bin
+firebase-service-account.json

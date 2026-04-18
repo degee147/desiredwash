@@ -6,13 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\WalletTransaction;
 use App\Services\FlutterwaveService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class WalletController extends Controller
 {
-    public function __construct(private FlutterwaveService $flutterwave)
-    {
+    public function __construct(
+        private FlutterwaveService $flutterwave,
+        private NotificationService $notifications,
+    ) {
     }
 
     // GET /api/v1/wallet/balance
@@ -122,6 +125,9 @@ class WalletController extends Controller
                 'status' => 'completed',
             ]);
 
+            // 🔔 Notify: wallet credited
+            $this->notifications->walletTopup($user->id, (float) $transaction->amount);
+
             return response()->json([
                 'new_balance' => (float) $user->fresh()->wallet_balance
             ]);
@@ -156,6 +162,9 @@ class WalletController extends Controller
         $transaction->update([
             'status' => 'completed',
         ]);
+
+        // 🔔 Notify: wallet credited
+        $this->notifications->walletTopup($user->id, $amount);
 
         return response()->json([
             'new_balance' => (float) $user->fresh()->wallet_balance
