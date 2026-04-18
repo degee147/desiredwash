@@ -10,5 +10,6 @@ class Service extends Model
         'name',
         'emoji',
         'price',
+        'description',
     ];
 }
