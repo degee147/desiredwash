@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\WalletTransaction;
 use App\Traits\CryptoTrait;
-use Illuminate\Http\Request;
-use App\Traits\TraitsManager;
 use App\Traits\Trading\TraderTrait;
+use App\Traits\TraitsManager;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class AppContextService
@@ -48,17 +50,38 @@ class AppContextService
     {
         $redirect = $request->input('redirect');
         $user = $request->user();
-        $user->update(['last_login_at' => now()]);
+        // $user->update(['last_login_at' => now()]);
 
         if ($redirect && str_starts_with($redirect, url('/'))) {
             return redirect()->intended($redirect);
         }
 
-        if ($user && $user->autopilot) {
-            return redirect()->route('dashboard');
-        }
-
 
         return redirect()->intended(route('dashboard', absolute: false));
+    }
+
+    public function updateUserBalance($userId)
+    {
+        return DB::transaction(function () use ($userId) {
+
+            $balance = WalletTransaction::where('user_id', $userId)
+                ->where('status', 'completed')
+                ->sum(DB::raw("
+            CASE
+                WHEN type = 'credit' THEN amount
+                WHEN type = 'debit' THEN -amount
+                ELSE 0
+            END
+        "));
+
+            $user = User::where('id', $userId)
+                ->lockForUpdate()
+                ->first();
+
+            $user->wallet_balance = $balance;
+            $user->save();
+
+            return $balance;
+        });
     }
 }

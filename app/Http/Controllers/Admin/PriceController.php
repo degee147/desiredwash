@@ -3,63 +3,61 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Price;
 use Illuminate\Http\Request;
 
 class PriceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $prices = Price::orderBy('category')->orderBy('item_name')->paginate(30);
+        return view('admin.prices.index', compact('prices'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.prices.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $this->validatedData($request);
+        Price::create($data);
+
+        return redirect()->route('admin.prices.index')
+            ->with('success', 'Price created.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Price $price)
     {
-        //
+        return view('admin.prices.edit', compact('price'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Price $price)
     {
-        //
+        $price->update($this->validatedData($request));
+
+        return redirect()->route('admin.prices.index')
+            ->with('success', 'Price updated.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Price $price)
     {
-        //
+        $price->delete();
+        return back()->with('success', 'Price deleted.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    private function validatedData(Request $request): array
     {
-        //
+        return $request->validate([
+            'item_name' => 'required|string|max:255',
+            'category' => 'required|string|max:100',
+            'service_type' => 'nullable|string|max:100',
+            'regular_price' => 'required|numeric|min:0',
+            'express_price' => 'nullable|numeric|min:0',
+            'icon_class' => 'nullable|string|max:100',
+            'description' => 'nullable|string',
+            'is_active' => 'boolean',
+        ]);
     }
 }

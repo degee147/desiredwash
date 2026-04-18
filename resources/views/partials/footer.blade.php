@@ -59,6 +59,7 @@
                 <li><a href="javascript:void(0)">Terms and Conditions</a></li>
                 <li><a href="javascript:void(0)">Privacy Policy</a></li>
                 <li><a href="{{ route('login') }}">Login</a></li>
+                <li><a href="{{ route('register') }}">Register</a></li>
             </ul>
         </div>
     </div>

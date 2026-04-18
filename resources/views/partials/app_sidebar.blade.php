@@ -6,7 +6,6 @@
                 <div class="logo-img">
                     <img src="{{ asset('logo.png') }}" style="max-width: 30px;">
                 </div>
-                <!-- <span class="text align-middle">BKMK</span> -->
             </a>
             <a id="sidebarToggle" href="javascript:;" class="nav-toggle d-none d-sm-none d-md-none d-lg-block">
                 <i data-toggle="expanded" class="ft-toggle-right toggle-icon"></i>
@@ -23,6 +22,7 @@
             <ul id="main-menu-navigation" data-menu="menu-navigation" class="navigation navigation-main">
                 @auth
 
+                    {{-- Dashboard --}}
                     <li class="nav-item @activeClass(['dashboard'])">
                         <a href="{{ route('dashboard') }}">
                             <i class="fa fa-home"></i>
@@ -30,117 +30,88 @@
                         </a>
                     </li>
 
-                    {{-- @if (auth()->user()->isSuperAdmin())
-                        <li class="nav-item @activeClass(['autopilot.cpanel'])">
-                            <a href="{{ route('autopilot.cpanel') }}">
-                                <i class="fa fa-tachometer"></i>
-                                <span data-i18n="" class="menu-title">Control</span>
-                            </a>
-                        </li>
-                    @endif
-                    <li class="nav-item @activeClass(['autopilot.trends.index'])">
-                        <a href="{{ route('autopilot.trends.index') }}">
-                            <i class="fa fa-line-chart"></i>
-                            <span data-i18n="" class="menu-title">Trends</span>
-                        </a>
-                    </li>
-
-                    @if (auth()->user()->isSuperAdmin())
-                        <li class="nav-item @activeClass(['autopilot.signals.index'])">
-                            <a href="{{ route('autopilot.signals.index') }}">
-                                <i class="fa fa-signal"></i>
-                                <span data-i18n="" class="menu-title">Signals</span>
+                    {{-- Users (admin/SA only) --}}
+                    @if (auth()->user()->isAdmin())
+                        <li class="nav-item @activeClass(['admin.users.*'])">
+                            <a href="{{ route('admin.users.index') }}">
+                                <i class="ft-users"></i>
+                                <span data-i18n="" class="menu-title">Users</span>
                             </a>
                         </li>
                     @endif
 
-                    <li class="nav-item @activeClass(['autopilot.trades.index'])">
-                        <a href="{{ route('autopilot.trades.index') }}">
-                            <i class="fa fa-exchange"></i>
-                            <span data-i18n="" class="menu-title">Trades</span>
-                        </a>
-                    </li>
-                    @if (auth()->user()->isSuperAdmin())
-                        <li class="nav-item @activeClass(['ror'])">
-                            <a href="{{ route('ror') }}">
-                                <i class="fa fa-plane"></i>
-                                <span data-i18n="" class="menu-title">ROR</span>
+                    {{-- Orders --}}
+                    @if (auth()->user()->isSupport())
+                        <li class="nav-item @activeClass(['admin.orders.*'])">
+                            <a href="{{ route('admin.orders.index') }}">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span data-i18n="" class="menu-title">Orders</span>
                             </a>
                         </li>
+                    @endif
 
-                        <li class="nav-item @activeClass(['autopilot.notifications'])">
-                            <a href="{{ route('autopilot.notifications') }}">
+                    {{-- Transactions --}}
+                    @if (auth()->user()->isAdmin())
+                        <li class="nav-item @activeClass(['admin.transactions.*'])">
+                            <a href="{{ route('admin.transactions.index') }}">
+                                <i class="fa fa-exchange"></i>
+                                <span data-i18n="" class="menu-title">Transactions</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    {{-- Notifications --}}
+                    @if (auth()->user()->isAdmin())
+                        <li class="nav-item @activeClass(['admin.notifications.*'])">
+                            <a href="{{ route('admin.notifications.index') }}">
                                 <i class="fa fa-bell"></i>
                                 <span data-i18n="" class="menu-title">Notifications</span>
                             </a>
                         </li>
-                        <li class="nav-item @activeClass(['autopilot.settings'])">
-                            <a href="{{ route('autopilot.settings') }}">
-                                <i class="fa fa-cogs"></i>
-                                <span data-i18n="" class="menu-title">Settings</span>
-                            </a>
-                        </li> --}}
-
-
-                    {{-- <li class="nav-item @activeClass(['users.index'])">
-                        <a href="{{ route('autopilot.users.index') }}">
-                            <i class="ft-users"></i>
-                            <span data-i18n="" class="menu-title">Users</span>
-                            <span class="tag badge badge-pill badge-dark float-right mr-1 mt-1">
-                                {{ $viewCounts['users'] ?? '' }}
-                            </span>
-                        </a>
-                    </li> --}}
-
-                    {{-- <li class="nav-item @activeClass(['autopilot.combos.index'])">
-                        <a href="{{ route('autopilot.combos.index') }}">
-                            <i class="fa fa-trophy"></i>
-                            <span data-i18n="" class="menu-title">Combos</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item @activeClass(['autopilot.subscriptions.index'])">
-                        <a href="{{ route('autopilot.subscriptions.index') }}">
-                            <i class="fa fa-money-bill"></i>
-                            <span data-i18n="" class="menu-title">Subscriptions</span>
-                        </a>
-                    </li>
-                    <li class="nav-item @activeClass(['autopilot.coupons.index'])">
-                        <a href="{{ route('autopilot.coupons.index') }}">
-                            <i class="fa fa-star"></i>
-                            <span data-i18n="" class="menu-title">Coupons</span>
-                        </a>
-                    </li>
                     @endif
 
+                    {{-- Prices --}}
+                    @if (auth()->user()->isAdmin())
+                        <li class="nav-item @activeClass(['admin.prices.*'])">
+                            <a href="{{ route('admin.prices.index') }}">
+                                <i class="fa fa-tag"></i>
+                                <span data-i18n="" class="menu-title">Prices</span>
+                            </a>
+                        </li>
+                    @endif
 
+                    {{-- Packages --}}
+                    @if (auth()->user()->isAdmin())
+                        <li class="nav-item @activeClass(['admin.packages.*'])">
+                            <a href="{{ route('admin.packages.index') }}">
+                                <i class="fa fa-cube"></i>
+                                <span data-i18n="" class="menu-title">Packages</span>
+                            </a>
+                        </li>
+                    @endif
 
-                    <li class="nav-item @activeClass(['autopilot.pricing'])">
-                        <a href="{{ route('autopilot.pricing') }}">
-                            <i class="fa fa-play"></i>
-                            <span data-i18n="" class="menu-title">Upgrade</span>
-                        </a>
-                    </li> --}}
+                    {{-- Services --}}
+                    @if (auth()->user()->isAdmin())
+                        <li class="nav-item @activeClass(['admin.services.*'])">
+                            <a href="{{ route('admin.services.index') }}">
+                                <i class="fa fa-cogs"></i>
+                                <span data-i18n="" class="menu-title">Services</span>
+                            </a>
+                        </li>
+                    @endif
 
-
-                    {{-- Uncomment if needed --}}
-                    {{-- <li class="nav-item @activeClass(['users.changePassword'])">
-                        <a href="{{ route('users.changePassword') }}">
-                            <i class="fa fa-key"></i>
-                            <span data-i18n="" class="menu-title">Change Password</span>
-                        </a>
-                    </li> --}}
-
+                    {{-- Logout --}}
                     <li class="nav-item">
                         <a href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form2').submit();">
                             <i class="ft-power"></i>
-                            <span data-i18n="" class="menu-title">Logout </span>
+                            <span data-i18n="" class="menu-title">Logout</span>
                         </a>
                         <form id="logout-form2" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
                     </li>
+
                 @endauth
             </ul>
         </div>

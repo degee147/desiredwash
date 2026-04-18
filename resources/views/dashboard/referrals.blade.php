@@ -27,7 +27,7 @@
                                 for DataTables provides three plug-ins that provide overlapping functionality for data export.
                             </p>
                             --}}
-                            @include('partials.autopilot.user_table', [
+                            @include('partials.user_table', [
                                 'refcode' => $currentUser->refcode ?? '',
                                 'record_name' => 'referrals',
                             ])

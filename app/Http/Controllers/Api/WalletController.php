@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\WalletTransaction;
+use App\Services\AppContextService;
 use App\Services\FlutterwaveService;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ class WalletController extends Controller
     public function __construct(
         private FlutterwaveService $flutterwave,
         private NotificationService $notifications,
+        private AppContextService $appContextService,
     ) {
     }
 
@@ -22,30 +24,10 @@ class WalletController extends Controller
     public function balance(Request $request)
     {
         $userId = $request->user()->id;
-
-        return DB::transaction(function () use ($userId) {
-
-            $balance = WalletTransaction::where('user_id', $userId)
-                ->where('status', 'completed')
-                ->sum(DB::raw("
-                CASE
-                    WHEN type = 'credit' THEN amount
-                    WHEN type = 'debit' THEN -amount
-                    ELSE 0
-                END
-            "));
-
-            $user = User::where('id', $userId)
-                ->lockForUpdate()
-                ->first();
-
-            $user->wallet_balance = $balance;
-            $user->save();
-
-            return response()->json([
-                'balance' => (float) $balance,
-            ]);
-        });
+        $balance = $this->appContextService->updateUserBalance($userId);
+        return response()->json([
+            'balance' => (float) $balance,
+        ]);
     }
 
     // POST /api/v1/wallet/topup

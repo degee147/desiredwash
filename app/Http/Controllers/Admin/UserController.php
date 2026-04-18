@@ -1,0 +1,121 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\WalletTransaction;
+use App\Services\AppContextService;
+use App\Services\FlutterwaveService;
+use App\Services\NotificationService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
+class UserController extends Controller
+{
+
+    public function __construct(
+        private FlutterwaveService $flutterwave,
+        private NotificationService $notifications,
+        private AppContextService $appContextService,
+    ) {
+    }
+    public function index()
+    {
+        $users = User::latest()->paginate(20);
+        return view('admin.users.index', compact('users'));
+    }
+
+    public function show(Request $request, User $user)
+    {
+        // --- Date Range Setup ---
+        $label = 'Last 3 Months';
+        $startDate = Carbon::now()->subMonths(3)->startOfMonth()->format('Y-m-d H:i:s');
+        $endDate = Carbon::now()->format('Y-m-d H:i:s');
+
+        if ($request->isMethod('post')) {
+            $startDate = $request->input('startDate');
+            $endDate = $request->input('endDate');
+            $label = $request->input('label');
+        }
+
+        // --- Bot ---
+
+        // --- Today's Wins & Losses ---
+        $todayStart = Carbon::today()->format('Y-m-d H:i:s');
+        $now = Carbon::now()->format('Y-m-d H:i:s');
+
+        $user->load(['orders', 'notifications']);
+        return view('admin.users.show', compact('user', 'startDate', 'endDate', 'label', 'todayStart', 'now'));
+    }
+
+    public function edit(User $user)
+    {
+        return view('admin.users.edit', compact('user'));
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+            'zone_id' => 'nullable|integer',
+            'admin' => 'boolean',
+            'support' => 'boolean',
+        ]);
+
+        $user->update($data);
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'User updated successfully.');
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'User deleted.');
+    }
+
+    public function fundUser(User $user)
+    {
+        $timestamp = now()->timestamp;
+        $txRef = "wallet_topup_{$user->id}_{$timestamp}";
+
+        WalletTransaction::create([
+            'user_id' => $user->id,
+            'type' => 'credit',
+            'status' => 'completed',
+            'amount' => 5000,
+            'description' => 'Admin Wallet top-up',
+            'reference' => $txRef,
+        ]);
+
+        $balance = $this->appContextService->updateUserBalance($user->id);
+
+        return back()->with('success', 'User wallet updated.');
+    }
+    public function toggleStatus(User $user)
+    {
+        // We use the 'admin' flag as a proxy for "active" here;
+        // swap for a dedicated `is_active` column if you add one.
+        $user->update(['admin' => !$user->admin]);
+
+        return back()->with('success', 'User status updated.');
+    }
+
+    public function resetPassword(User $user)
+    {
+        $newPassword = Str::random(10);
+        $user->update(['password' => Hash::make($newPassword)]);
+
+        // Optionally email the new password to the user here.
+
+        return back()->with('success', "Password reset. Temporary password: {$newPassword}");
+    }
+}
