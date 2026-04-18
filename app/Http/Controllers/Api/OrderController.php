@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Service;
 use App\Models\WalletTransaction;
 use App\Models\Zone;
+use App\Services\AppContextService;
 use App\Services\FlutterwaveService;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
@@ -15,9 +16,11 @@ use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
+
     public function __construct(
         private FlutterwaveService $flutterwave,
         private NotificationService $notifications,
+        private AppContextService $appContextService,
     ) {
     }
 
@@ -212,7 +215,7 @@ class OrderController extends Controller
 
             if ($order->payment_method === 'wallet' && $order->payment_status === 'success') {
                 $user = $request->user();
-                $user->increment('wallet_balance', $order->total);
+                // $user->increment('wallet_balance', $order->total);
 
                 WalletTransaction::create([
                     'user_id' => $user->id,
@@ -222,6 +225,8 @@ class OrderController extends Controller
                     'description' => "Refund for cancelled order #{$order->id}",
                     'reference' => $order->id,
                 ]);
+
+                $balance = $this->appContextService->updateUserBalance($user->iId);
             }
         });
 

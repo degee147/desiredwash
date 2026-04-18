@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Notification;
-use App\Models\User;
 use App\Models\UserDevice;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -151,9 +150,9 @@ class NotificationService
                     ],
                     'data' => $data,
                     'android' => [
+                        'priority' => 'high',
                         'notification' => [
                             'channel_id' => 'desiredwash_orders',
-                            'priority' => 'HIGH',
                         ],
                     ],
                     'apns' => [
@@ -178,8 +177,8 @@ class NotificationService
                     'body' => $response->body(),
                 ]);
 
-                // Clean up stale / unregistered tokens
-                if (in_array($response->status(), [400, 404])) {
+                // Clean up only unregistered tokens (404), not payload errors (400)
+                if ($response->status() === 404) {
                     UserDevice::where('fcm_token', $token)->delete();
                 }
             } else {

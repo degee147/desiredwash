@@ -70,4 +70,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // ── 📱 FCM Token ────────────────────────────────
     Route::post('notifications/fcm-token', [FcmTokenController::class, 'store']);
+    Route::post('notifications/test', [FcmTokenController::class, 'sendTest']);
 });
