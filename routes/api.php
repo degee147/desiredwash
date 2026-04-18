@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FcmTokenController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\OptionsController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProfileController;
@@ -29,6 +30,7 @@ Route::prefix('auth')->group(function () {
 // ── Public ────────────────────────────────────────────────────────────────
 Route::get('zones', [ZoneController::class, 'index']);
 Route::get('services', [ServicesController::class, 'index']);
+Route::get('options', [OptionsController::class, 'index']);
 
 // ── Flutterwave webhook (public — verified by verif-hash header) ──────────
 Route::post('webhooks/flutterwave', [WebhookController::class, 'handle']);
