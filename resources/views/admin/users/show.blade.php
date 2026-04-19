@@ -166,9 +166,13 @@
                     @if ($user->auth_provider)
                         <span class="badge badge-light border">via {{ $user->auth_provider }}</span>
                     @endif
+                    <div class="mt-2">
+                        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-primary">
+                            <i class="fa fa-pencil"></i> Edit
+                        </a>
+                    </div>
                 </div>
             </div>
-
             {{-- Wallet balance --}}
             <div class="card mb-2">
                 <div class="card-header">
