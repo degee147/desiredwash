@@ -1,5 +1,5 @@
 <div class="table-responsive col-sm-12">
-    <table class="table table-striped table-bordered file-export" id="transactions_table">
+    <table class="table table-striped table-bordered file-export" id="wallet_transactions_table">
         <thead>
             <tr>
                 <th>SN</th>
@@ -10,12 +10,10 @@
                 @endif
                 <th>Type</th>
                 <th>Amount</th>
-                <th>Currency</th>
+                <th>Description</th>
                 <th>Status</th>
+                <th>Processed</th>
                 <th>Date</th>
-                @if ($currentUser->isAdmin())
-                    <th>Actions</th>
-                @endif
             </tr>
         </thead>
         <tbody>
@@ -27,16 +25,15 @@
 @php
     $datatableOptions = [
         'record_name' => $record_name ?? 'Transactions',
-        'specific_id' => 'transactions_table',
+        'specific_id' => 'wallet_transactions_table',
         'ajax_table' => true,
         'searching' => $currentUser->isAdmin(),
         'export' => false,
         'ordering' => $currentUser->isAdmin(),
         'autoreload' => false,
         'stateSave' => true,
-        'ajax_url' => route('tables.transactions', [
-            'userid' => isset($userid) ? $userid : null,
-            'viewpage' => isset($viewpage) ? $viewpage : false,
+        'ajax_url' => route('tables.wallet_transactions', [
+            'userid' => $userid ?? null,
         ]),
     ];
 @endphp

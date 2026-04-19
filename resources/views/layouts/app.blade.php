@@ -9,6 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta name="author" content="Cybernek Solutions Limited">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>
         {{ !empty($title) ? $title . ' :: ' : '' }} {{ $siteDescription }}
     </title>
@@ -70,6 +71,8 @@
     <!-- BEGIN Custom CSS-->
     @include('partials.custom_css')
     <!-- END Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/colors.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/components.css') }}">
 
 </head>
 
@@ -126,6 +129,8 @@
     {{-- <script src="{{ asset('assets/js/dashboard1.js') }}" type="text/javascript"></script> --}}
     <!-- END PAGE LEVEL JS-->
     <!-- Global site tag (gtag.js) - Google Analytics -->
+
+    {{-- <script src="{{ asset('assets/js/app.js') }}"></script> --}}
     <script>
         //$('#flash-overlay-modal').modal();
     </script>

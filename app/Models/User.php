@@ -64,10 +64,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
-
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class);
+    }
     public function walletTransactions()
     {
         return $this->hasMany(WalletTransaction::class);
+    }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 
     public function notifications()

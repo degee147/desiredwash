@@ -5,8 +5,10 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\PriceController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ZoneController;
 use App\Http\Controllers\AjaxTableController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
@@ -44,18 +46,21 @@ Route::middleware('auth')->group(function () {
             Route::get('/resendmail', [DashboardController::class, 'resendmail'])->name('resendmail');
         });
 
-    // Ajax DataTables — {userid} is auth()->id(), passed in from Blade
+    // Ajax DataTables
     Route::prefix('tables')
         ->name('tables.')
         ->group(function () {
             Route::get('/users/{userid}', [AjaxTableController::class, 'users'])->name('users');
-            Route::get('/orders/{userid}', [AjaxTableController::class, 'orders'])->name('orders');
-            Route::get('/transactions/{userid}', [AjaxTableController::class, 'transactions'])->name('transactions');
+            Route::get('/orders/{userid?}/{viewpage?}', [AjaxTableController::class, 'orders'])->name('orders');
+            Route::get('/transactions/{userid?}/{viewpage?}', [AjaxTableController::class, 'transactions'])->name('transactions');
+            Route::get('/wallet-transactions/{userid?}', [AjaxTableController::class, 'walletTransactions'])->name('wallet_transactions');
+            // Route::get('/transactions/{userid}', [AjaxTableController::class, 'transactions'])->name('transactions');
             Route::get('/notifications/{userid}', [AjaxTableController::class, 'notifications'])->name('notifications');
             Route::get('/prices/{userid}', [AjaxTableController::class, 'prices'])->name('prices');
             Route::get('/packages/{userid}', [AjaxTableController::class, 'packages'])->name('packages');
             Route::get('/services/{userid}', [AjaxTableController::class, 'services'])->name('services');
             Route::get('/jobs', [AjaxTableController::class, 'jobs'])->name('jobs');
+            Route::get('/zones/{userid}', [AjaxTableController::class, 'zones'])->name('zones');
         });
 
 
@@ -78,11 +83,30 @@ Route::middleware('auth')->group(function () {
                 Route::get('/{user}/reset-password', [UserController::class, 'resetPassword'])->name('resetPassword');
             });
 
+            // Zones
+            Route::prefix('zones')->name('zones.')->group(function () {
+                Route::get('/', [ZoneController::class, 'index'])->name('index');
+                Route::get('/create', [ZoneController::class, 'create'])->name('create');
+                Route::post('/', [ZoneController::class, 'store'])->name('store');
+                Route::get('/{zone}', [ZoneController::class, 'show'])->name('show');
+                Route::get('/{zone}/edit', [ZoneController::class, 'edit'])->name('edit');
+                Route::put('/{zone}', [ZoneController::class, 'update'])->name('update');
+                Route::delete('/{zone}', [ZoneController::class, 'destroy'])->name('destroy');
+            });
+
+            // Settings
+            Route::prefix('settings')->name('settings.')->group(function () {
+                Route::get('/', [SettingsController::class, 'edit'])->name('edit');
+                Route::post('/', [SettingsController::class, 'update'])->name('update');
+            });
+
             // Orders
             Route::prefix('orders')->name('orders.')->group(function () {
                 Route::get('/', [OrderController::class, 'index'])->name('index');
                 Route::get('/{order}', [OrderController::class, 'show'])->name('show');
                 Route::put('/{order}/status', [OrderController::class, 'updateStatus'])->name('updateStatus');
+                Route::post('/{order}/advance-status', [OrderController::class, 'advanceStatus'])->name('advance-status');
+                Route::post('/{order}/cancel', [OrderController::class, 'cancelOrder'])->name('cancel');
             });
 
             // Transactions

@@ -1,4 +1,9 @@
 <style>
+    .card-body {
+        padding: 1.25rem !important;
+        -webkit-box-flex: 1;
+    }
+
     .stat-line {
         white-space: nowrap;
         overflow-x: auto;

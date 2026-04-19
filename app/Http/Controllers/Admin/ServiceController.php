@@ -42,6 +42,7 @@ class ServiceController extends Controller
 
     public function destroy(Service $service)
     {
+        return back()->with('error', 'Delete is temporarily disabled to prevent accidental deletions.');
         $service->delete();
         return back()->with('success', 'Service deleted.');
     }

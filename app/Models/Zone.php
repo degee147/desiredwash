@@ -21,4 +21,9 @@ class Zone extends Model
         'is_available' => 'boolean',
         'delivery_fee' => 'decimal:2',
     ];
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'zone_id');
+    }
 }

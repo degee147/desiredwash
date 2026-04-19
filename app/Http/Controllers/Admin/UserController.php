@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\WalletTransaction;
+use App\Models\Zone;
 use App\Services\AppContextService;
 use App\Services\FlutterwaveService;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -27,33 +29,44 @@ class UserController extends Controller
         $users = User::latest()->paginate(20);
         return view('admin.users.index', compact('users'));
     }
-
     public function show(Request $request, User $user)
     {
-        // --- Date Range Setup ---
-        $label = 'Last 3 Months';
-        $startDate = Carbon::now()->subMonths(3)->startOfMonth()->format('Y-m-d H:i:s');
-        $endDate = Carbon::now()->format('Y-m-d H:i:s');
-
-        if ($request->isMethod('post')) {
-            $startDate = $request->input('startDate');
-            $endDate = $request->input('endDate');
-            $label = $request->input('label');
-        }
-
-        // --- Bot ---
-
-        // --- Today's Wins & Losses ---
-        $todayStart = Carbon::today()->format('Y-m-d H:i:s');
-        $now = Carbon::now()->format('Y-m-d H:i:s');
-
-        $user->load(['orders', 'notifications']);
-        return view('admin.users.show', compact('user', 'startDate', 'endDate', 'label', 'todayStart', 'now'));
+        $zone = Zone::find($user->zone_id);
+        return view('admin.users.show', compact('user', 'zone'));
     }
+    // public function show(Request $request, User $user)
+    // {
+    //     // --- Date Range Setup ---
+    //     $label = 'Last 3 Months';
+    //     $startDate = Carbon::now()->subMonths(3)->startOfMonth()->format('Y-m-d H:i:s');
+    //     $endDate = Carbon::now()->format('Y-m-d H:i:s');
+
+    //     if ($request->isMethod('post')) {
+    //         $startDate = $request->input('startDate');
+    //         $endDate = $request->input('endDate');
+    //         $label = $request->input('label');
+    //     }
+
+    //     // --- Bot ---
+
+    //     // --- Today's Wins & Losses ---
+    //     $todayStart = Carbon::today()->format('Y-m-d H:i:s');
+    //     $now = Carbon::now()->format('Y-m-d H:i:s');
+
+    //     $user->load(['orders', 'notifications']);
+    //     return view('admin.users.show', compact('user', 'startDate', 'endDate', 'label', 'todayStart', 'now'));
+    // }
+
+
 
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        if (!auth()->user()->isSuperAdmin()) {
+            abort(403, 'Unauthorized. Superadmin access required.');
+        }
+        $zones = Zone::orderBy('name')->get();
+
+        return view('admin.users.edit', compact('user', 'zones'));
     }
 
     public function update(Request $request, User $user)
@@ -76,30 +89,47 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        return back()->with('error', 'Delete is temporarily disabled to prevent accidental deletions.');
         $user->delete();
 
         return redirect()->route('admin.users.index')
             ->with('success', 'User deleted.');
     }
-
-    public function fundUser(User $user)
+    public function fundUser(Request $request, User $user)
     {
-        $timestamp = now()->timestamp;
-        $txRef = "wallet_topup_{$user->id}_{$timestamp}";
+        // Superadmin only
+        if (!auth()->user()->isSuperAdmin()) {
+            abort(403, 'Unauthorized. Superadmin access required.');
+        }
 
-        WalletTransaction::create([
-            'user_id' => $user->id,
-            'type' => 'credit',
-            'status' => 'completed',
-            'amount' => 5000,
-            'description' => 'Admin Wallet top-up',
-            'reference' => $txRef,
+        $request->validate([
+            'amount' => ['required', 'numeric', 'min:1'],
         ]);
 
-        $balance = $this->appContextService->updateUserBalance($user->id);
+        $amount = round((float) $request->amount, 2);
 
-        return back()->with('success', 'User wallet updated.');
+        DB::transaction(function () use ($user, $amount) {
+
+            $timestamp = now()->timestamp;
+            $txRef = "wallet_topup_{$user->id}_{$timestamp}";
+
+            WalletTransaction::create([
+                'user_id' => $user->id,
+                'type' => 'credit',
+                'status' => 'completed',
+                'amount' => $amount,
+                'description' => 'Admin Wallet top-up',
+                'reference' => $txRef,
+            ]);
+
+            $balance = $this->appContextService->updateUserBalance($user->id);
+
+
+        });
+
+        return back()->with('success', '₦' . number_format($amount, 2) . ' added to ' . $user->name . "'s wallet.");
     }
+
     public function toggleStatus(User $user)
     {
         // We use the 'admin' flag as a proxy for "active" here;

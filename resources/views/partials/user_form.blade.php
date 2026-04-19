@@ -66,10 +66,23 @@
             --}}
 
             <div class="form-group row">
-                <label class="col-md-3 label-control" for="bio">Bio:</label>
+                <label class="col-md-3 label-control" for="phone">Phone:</label>
                 <div class="col-md-6">
                     <div class="position-relative has-icon-left">
-                        <textarea name="bio" id="bio" class="form-control" placeholder="enter bio" autocomplete="off">{{ old('bio', $user->bio ?? '') }}</textarea>
+                        <input type="text" name="phone" id="phone" class="form-control"
+                            placeholder="enter phone" autocomplete="off" value="{{ old('phone', $user->phone ?? '') }}">
+                        <div class="form-control-position">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-3 label-control" for="address">Address:</label>
+                <div class="col-md-6">
+                    <div class="position-relative has-icon-left">
+                        <textarea name="address" id="address" class="form-control" placeholder="enter address" autocomplete="off">{{ old('address', $user->address ?? '') }}</textarea>
                         <div class="form-control-position">
                             <i class="fa fa-info"></i>
                         </div>
@@ -77,89 +90,6 @@
                 </div>
             </div>
 
-            @if (!isset($show_balance) || $show_balance)
-                <div class="form-group row">
-                    <label class="col-md-3 label-control" for="opening_live">Opening Live Balance:</label>
-                    <div class="col-md-6">
-                        <div class="position-relative has-icon-left">
-                            <input type="number" name="opening_live" id="opening_live" class="form-control"
-                                placeholder="enter phone number" autocomplete="off" step="0.00000001"
-                                value="{{ old('opening_live', $user->opening_live ?? '') }}">
-                            <div class="form-control-position">
-                                <i class="fa fa-bank"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-md-3 label-control" for="opening_test">Opening Test Balance:</label>
-                    <div class="col-md-6">
-                        <div class="position-relative has-icon-left">
-                            <input type="number" name="opening_test" id="opening_test" class="form-control"
-                                placeholder="enter phone number" autocomplete="off"
-                                value="{{ old('opening_test', $user->opening_test ?? '') }}">
-                            <div class="form-control-position">
-                                <i class="fa fa-bank"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-md-3 label-control" for="sa" style="margin-top: 20px;">Super Admin</label>
-                    <div class="col-md-6">
-                        <input type="checkbox" name="sa" id="sa" class="option-input radio"
-                            {{ old('sa', $user->sa ?? false) ? 'checked' : '' }}>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-md-3 label-control" for="admin" style="margin-top: 20px;"> Admin</label>
-                    <div class="col-md-6">
-                        <input type="checkbox" name="admin" id="admin" class="option-input radio"
-                            {{ old('admin', $user->admin ?? false) ? 'checked' : '' }}>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-md-3 label-control" for="elite" style="margin-top: 20px;"> Elite</label>
-                    <div class="col-md-6">
-                        <input type="checkbox" name="elite" id="elite" class="option-input radio"
-                            {{ old('elite', $user->elite ?? false) ? 'checked' : '' }}>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-md-3 label-control" for="oddacity" style="margin-top: 20px;"> Oddacity</label>
-                    <div class="col-md-6">
-                        <input type="checkbox" name="oddacity" id="oddacity" class="option-input radio"
-                            {{ old('oddacity', $user->oddacity ?? false) ? 'checked' : '' }}>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-md-3 label-control" for="autopilot" style="margin-top: 20px;">
-                        Autopilot</label>
-                    <div class="col-md-6">
-                        <input type="checkbox" name="autopilot" id="autopilot" class="option-input radio"
-                            {{ old('autopilot', $user->autopilot ?? false) ? 'checked' : '' }}>
-                    </div>
-                </div>
-            @endif
-
-            @if (!isset($show_password) || $show_password)
-                <div class="form-group row">
-                    <label class="col-md-3 label-control" for="description">Password:
-                        <span class="required" aria-required="true"> * </span>
-                    </label>
-                    <div class="col-md-6">
-                        <div class="position-relative has-icon-left">
-                            <p>The default password is
-                                <strong>abcdef</strong>
-                            </p>
-                            <p>User will be required to change their password</p>
-                        </div>
-                    </div>
-                </div>
-            @endif
         </div>
         <div class="form-actions">
             <div class="row clearfix">

@@ -43,6 +43,9 @@ class PriceController extends Controller
 
     public function destroy(Price $price)
     {
+        return back()->with('error', 'Delete is temporarily disabled to prevent accidental deletions.');
+        // dd(auth()->user()->isSuperAdmin());
+        // abort_unless(auth()->user()->isSuperAdmin(), 403);
         $price->delete();
         return back()->with('success', 'Price deleted.');
     }

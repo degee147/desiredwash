@@ -10,11 +10,69 @@ use App\Models\Price;
 use App\Models\Service;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\WalletTransaction;
+use App\Models\Zone;
+use App\Traits\TraitsManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AjaxTableController extends Controller
 {
+    use TraitsManager;
+
+
+    public function zones(Request $request, $userid)
+    {
+        $currentUser = User::findOrFail($userid);
+        $q = $request->query();
+
+        $columnsMap = [
+            1 => 'id',
+            2 => 'name',
+            3 => 'area',
+            4 => 'delivery_fee',
+            5 => 'is_available',
+        ];
+
+        $query = Zone::orderBy(
+            $columnsMap[$q['order'][0]['column'] ?? 2] ?? 'name',
+            strtoupper($q['order'][0]['dir'] ?? 'ASC')
+        );
+
+        if (!empty($q['search']['value'])) {
+            $term = $q['search']['value'];
+            $query->where(function ($sq) use ($term) {
+                $sq->where('id', 'like', "%{$term}%")
+                    ->orWhere('name', 'like', "%{$term}%")
+                    ->orWhere('area', 'like', "%{$term}%");
+            });
+        }
+
+        [$total, $items] = $this->paginate($query, $q);
+
+        $rows = [];
+        foreach ($items as $i => $z) {
+            $rows[] = [
+                $i + 1,
+                '<code>' . e($z->id) . '</code>',
+                e($z->name),
+                e($z->area),
+                '₦' . number_format((float) $z->delivery_fee, 2),
+                $z->is_available
+                ? '<span class="badge badge-success">Available</span>'
+                : '<span class="badge badge-secondary">Unavailable</span>',
+                '<a href="' . route('admin.zones.edit', $z->id) . '" class="btn btn-xs btn-warning btn-raised btn-icon" title="Edit"><i class="fa fa-pencil"></i></a> ' .
+                ($currentUser->isSuperAdmin()
+                    ? '<form method="POST" action="' . route('admin.zones.destroy', $z->id) . '" style="display:inline" onsubmit="return confirm(\'Delete this zone?\')">
+                    ' . csrf_field() . method_field('DELETE') . '
+                    <button type="submit" class="btn btn-xs btn-danger btn-raised btn-icon" title="Delete"><i class="fa fa-trash"></i></button>
+                   </form>'
+                    : ''),
+            ];
+        }
+
+        return $this->dtResponse($q, $total, $rows);
+    }
     // ══════════════════════════════════════════════════════════════════════════
     //  USERS
     //  Columns: #, Name, Email, Phone, Wallet, Joined, Actions
@@ -57,7 +115,7 @@ class AjaxTableController extends Controller
             $actions = $currentUser->isAdmin()
                 ? '<a href="' . route('admin.users.show', $u->id) . '" class="btn btn-xs btn-primary btn-raised btn-icon mr-1" title="View"><i class="fa fa-search"></i></a>'
                 . '<a href="' . route('admin.users.edit', $u->id) . '" class="btn btn-xs btn-warning btn-raised btn-icon mr-1" title="Edit"><i class="fa fa-edit"></i></a>'
-                . $this->postButton(route('admin.users.toggleStatus', $u->id), 'btn-info', $toggleIcon, "{$toggleLabel} {$u->name}?")
+                // . $this->postButton(route('admin.users.toggleStatus', $u->id), 'btn-info', $toggleIcon, "{$toggleLabel} {$u->name}?")
                 . '<a href="' . route('admin.users.resetPassword', $u->id) . '" onclick="return confirm(\'Reset password of ' . addslashes($u->name) . '?\')" class="btn btn-xs btn-secondary btn-raised btn-icon mr-1" title="Reset Password"><i class="fa fa-key"></i></a>'
                 . $this->deleteButton(route('admin.users.destroy', $u->id), "Delete {$u->name}?")
                 : '—';
@@ -81,17 +139,25 @@ class AjaxTableController extends Controller
     //  Columns: #, Order ID, Customer, Zone, Total, Payment, Status, Date, Actions
     // ══════════════════════════════════════════════════════════════════════════
 
-    public function orders(Request $request, $userid)
+    public function orders(Request $request, $userid = null, $viewpage = false)
     {
-        $currentUser = User::findOrFail($userid);
+        $viewpage = filter_var($viewpage, FILTER_VALIDATE_BOOLEAN);
+        // $currentUser = User::findOrFail($userid);
         $q = $request->query();
 
-        $columnsMap = [
+        $columnsMap = $viewpage ? [
             1 => 'id',
             2 => 'total',
             3 => 'status',
             4 => 'payment_status',
             5 => 'created_at',
+        ] : [
+            1 => 'id',
+            2 => 'total',
+            3 => 'status',
+            4 => 'payment_status',
+            5 => 'created_at',
+            6 => 'created_at', // customer col non-sortable, keep index safe
         ];
 
         $query = Order::with('user')->orderBy(
@@ -99,8 +165,7 @@ class AjaxTableController extends Controller
             strtoupper($q['order'][0]['dir'] ?? 'DESC')
         );
 
-        // Support staff only sees their own user's orders; admins see all
-        if (!$currentUser->isAdmin()) {
+        if (!empty($userid)) {
             $query->where('user_id', $userid);
         }
 
@@ -128,30 +193,64 @@ class AjaxTableController extends Controller
 
         $rows = [];
         foreach ($items as $i => $o) {
-            $rows[] = [
+            $nextStatus = self::STATUS_FLOW[$o->status] ?? null;
+            $canCancel = !in_array($o->status, ['delivered', 'cancelled']);
+
+            $actions = '<a href="' . route('admin.orders.show', $o->id) . '"
+        class="btn btn-xs btn-primary btn-raised btn-icon" title="View">
+        <i class="fa fa-search"></i></a>';
+
+            if ($nextStatus) {
+                $actions .= ' <button type="button"
+            class="btn btn-xs btn-success btn-raised advance-status-btn"
+            data-id="' . e($o->id) . '"
+            data-next="' . e($nextStatus) . '"
+            data-url="' . route('admin.orders.advance-status', $o->id) . '"
+            title="Mark as ' . e($nextStatus) . '">
+            <i class="fa fa-arrow-right"></i></button>';
+            }
+
+            if ($canCancel) {
+                $actions .= ' <button type="button"
+            class="btn btn-xs btn-danger btn-raised cancel-order-btn"
+            data-id="' . e($o->id) . '"
+            data-url="' . route('admin.orders.cancel', $o->id) . '"
+            title="Cancel">
+            <i class="fa fa-times"></i></button>';
+            }
+
+            $row = [
                 $i + 1,
                 '<code>' . e(substr($o->id, 0, 8)) . '…</code>',
-                e($o->user?->name ?? '—') . '<br><small class="text-muted">' . e($o->user?->email ?? '') . '</small>',
+            ];
+
+            if (!$viewpage) {
+                $row[] = e($o->user?->name ?? '—') . '<br><small class="text-muted">' . e($o->user?->email ?? '') . '<br><small class="text-muted">' . e($o->user?->phone ?? '') . '</small>';
+            }
+
+            $row = array_merge($row, [
                 e($o->zone_name ?? '—'),
                 '₦' . number_format((float) $o->total, 2),
                 $this->badge($o->payment_status, 'payment'),
                 $this->badge($o->status),
-                $o->created_at?->format('M j, Y') ?? '—',
-                '<a href="' . route('admin.orders.show', $o->id) . '" class="btn btn-xs btn-primary btn-raised btn-icon" title="View"><i class="fa fa-search"></i></a>',
-            ];
+                $o->created_at?->format('M j, Y, g:i a') ?? '—',
+                $actions,
+            ]);
+
+            $rows[] = $row;
         }
 
         return $this->dtResponse($q, $total, $rows);
     }
-
     // ══════════════════════════════════════════════════════════════════════════
     //  TRANSACTIONS
     //  Columns: #, Ref, User, Type, Amount, Currency, Status, Date, Actions
     // ══════════════════════════════════════════════════════════════════════════
 
-    public function transactions(Request $request, $userid)
+    public function transactions(Request $request, $userid = null, $viewpage = false)
     {
-        $currentUser = User::findOrFail($userid);
+        $viewpage = filter_var($viewpage, FILTER_VALIDATE_BOOLEAN);
+        // $currentUser = $userid ? User::findOrFail($userid) : null;
         $q = $request->query();
 
         $columnsMap = [
@@ -167,7 +266,7 @@ class AjaxTableController extends Controller
             strtoupper($q['order'][0]['dir'] ?? 'DESC')
         );
 
-        if (!$currentUser->isAdmin()) {
+        if (!empty($userid)) {
             $query->where('user_id', $userid);
         }
 
@@ -199,16 +298,92 @@ class AjaxTableController extends Controller
 
         $rows = [];
         foreach ($items as $i => $t) {
-            $rows[] = [
+            $row = [
                 $i + 1,
                 '<code>' . e($t->tx_ref) . '</code>',
-                e($t->user?->name ?? '—') . '<br><small class="text-muted">' . e($t->user?->email ?? '') . '</small>',
+            ];
+
+            if (!$viewpage) {
+                $row[] = e($t->user?->name ?? '—') . '<br><small class="text-muted">' . e($t->user?->email ?? '') . '</small>';
+            }
+
+            $row = array_merge($row, [
                 '<span class="badge badge-secondary">' . e($t->type) . '</span>',
                 '₦' . number_format((float) $t->amount, 2),
                 e($t->currency ?? 'NGN'),
                 $this->badge($t->status, 'payment'),
                 $t->created_at?->format('M j, Y g:i A') ?? '—',
                 '<a href="' . route('admin.transactions.show', $t->id) . '" class="btn btn-xs btn-primary btn-raised btn-icon" title="View"><i class="fa fa-search"></i></a>',
+            ]);
+
+            $rows[] = $row;
+        }
+
+        return $this->dtResponse($q, $total, $rows);
+    }
+
+    public function walletTransactions(Request $request, $userid = null)
+    {
+        // $currentUser = $userid ? User::findOrFail($userid) : null;
+        $q = $request->query();
+
+        $columnsMap = [
+            1 => 'reference',
+            2 => 'type',
+            3 => 'amount',
+            4 => 'status',
+            5 => 'created_at',
+        ];
+
+        $query = WalletTransaction::with('user')->orderBy(
+            $columnsMap[$q['order'][0]['column'] ?? 5] ?? 'created_at',
+            strtoupper($q['order'][0]['dir'] ?? 'DESC')
+        );
+
+        if (!empty($userid)) {
+            $query->where('user_id', $userid);
+        }
+
+        if (!empty($q['search']['value'])) {
+            $term = $q['search']['value'];
+            $query->where(function ($sq) use ($term) {
+                $sq->where('reference', 'like', "%{$term}%")
+                    ->orWhere('description', 'like', "%{$term}%")
+                    ->orWhere('type', 'like', "%{$term}%")
+                    ->orWhere('status', 'like', "%{$term}%")
+                    ->orWhereHas(
+                        'user',
+                        fn($uq) =>
+                        $uq->where('name', 'like', "%{$term}%")
+                            ->orWhere('email', 'like', "%{$term}%")
+                    );
+            });
+        }
+
+        if (!empty($q['status'])) {
+            $query->where('status', $q['status']);
+        }
+
+        if (!empty($q['type'])) {
+            $query->where('type', $q['type']);
+        }
+
+        [$total, $items] = $this->paginate($query, $q);
+
+        $rows = [];
+        foreach ($items as $i => $t) {
+            $rows[] = [
+                $i + 1,
+                '<code>' . e($t->reference ?? '—') . '</code>',
+                // e($t->user?->name ?? '—') . '<br><small class="text-muted">' . e($t->user?->email ?? '') . '</small>',
+                $t->type === 'credit'
+                ? '<span class="badge badge-success">Credit</span>'
+                : '<span class="badge badge-danger">Debit</span>',
+                '₦' . number_format((float) $t->amount, 2),
+                e($t->description ?? '—'),
+                $this->badge($t->status, 'payment'),
+                $t->processed_at?->format('M j, Y g:i A') ?? '—',
+                $t->created_at?->format('M j, Y g:i A') ?? '—',
             ];
         }
 
@@ -538,26 +713,5 @@ class AjaxTableController extends Controller
             . '<i class="fa fa-trash"></i></button></form>';
     }
 
-    private function badge(string $value, string $context = 'order'): string
-    {
-        $map = $context === 'payment'
-            ? [
-                'successful' => 'badge-success',
-                'pending' => 'badge-warning',
-                'failed' => 'badge-danger',
-                'cancelled' => 'badge-secondary',
-            ]
-            : [
-                'delivered' => 'badge-success',
-                'processing' => 'badge-info',
-                'picked_up' => 'badge-info',
-                'confirmed' => 'badge-primary',
-                'ready' => 'badge-primary',
-                'pending' => 'badge-warning',
-                'cancelled' => 'badge-danger',
-            ];
 
-        return '<span class="badge ' . ($map[$value] ?? 'badge-secondary') . '">'
-            . e(ucfirst(str_replace('_', ' ', $value))) . '</span>';
-    }
 }

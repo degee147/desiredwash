@@ -34,14 +34,32 @@ class PackageController extends Controller
 
     public function update(Request $request, Package $package)
     {
-        $package->update($this->validatedData($request));
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'old_price' => 'nullable|numeric|min:0',
+            'items_raw' => 'nullable|string',
+            'icon_class' => 'nullable|string|max:100',
+            'sort_order' => 'nullable|integer|min:0',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+        ]);
 
-        return redirect()->route('admin.packages.index')
-            ->with('success', 'Package updated.');
+        $validated['items'] = array_filter(
+            array_map('trim', explode("\n", $validated['items_raw'] ?? '')),
+            fn($line) => $line !== ''
+        );
+
+        unset($validated['items_raw']);
+
+        $package->update($validated);
+
+        return redirect()->route('admin.packages.index')->with('success', 'Package updated.');
     }
-
     public function destroy(Package $package)
     {
+        return back()->with('error', 'Delete is temporarily disabled to prevent accidental deletions.');
         $package->delete();
         return back()->with('success', 'Package deleted.');
     }

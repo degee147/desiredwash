@@ -3,44 +3,100 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\User;
+use App\Models\WalletTransaction;
+use App\Models\Zone;
 use App\Services\AppContextService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 
 class DashboardController extends Controller
 {
 
-    protected $appContextService;
 
-    public function __construct(AppContextService $appContextService)
+    public function index()
     {
-        $this->appContextService = $appContextService;
-    }
+        $today = today();
 
-    public function index(Request $request)
-    {
-        $request = request();
-        // --- Date Range Setup ---
-        $label = 'Last 3 Months';
-        $startDate = Carbon::now()->subMonths(3)->startOfMonth()->format('Y-m-d H:i:s');
-        $endDate = Carbon::now()->format('Y-m-d H:i:s');
+        // --- Stat cards ---
+        $totalOrders = Order::count();
+        $totalRevenue = Order::where('payment_status', 'success')->sum('total');
+        $paidOrdersCount = Order::where('payment_status', 'success')->count();
+        $pendingOrdersCount = Order::where('status', 'pending')->count();
+        $totalUsers = User::where('sa', 0)->where('admin', 0)->where('support', 0)->count();
+        $totalWalletBalance = User::sum('wallet_balance');
 
-        if ($request->isMethod('post')) {
-            $startDate = $request->input('startDate');
-            $endDate = $request->input('endDate');
-            $label = $request->input('label');
-        }
+        // --- Today ---
+        $ordersToday = Order::whereDate('created_at', $today)->count();
+        $revenueToday = Order::whereDate('created_at', $today)->where('payment_status', 'success')->sum('total');
+        $newUsersToday = User::whereDate('created_at', $today)->count();
+        $cancelledToday = Order::whereDate('updated_at', $today)->where('status', 'cancelled')->count();
+        $walletCreditedToday = WalletTransaction::whereDate('created_at', $today)->where('type', 'credit')->where('status', 'completed')->sum('amount');
+        $walletTxToday = WalletTransaction::whereDate('created_at', $today)->count();
 
-        // --- Bot ---
+        // --- Orders by status ---
+        $ordersByStatus = Order::select('status', DB::raw('count(*) as count'))
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
 
-        // --- Today's Wins & Losses ---
-        $todayStart = Carbon::today()->format('Y-m-d H:i:s');
-        $now = Carbon::now()->format('Y-m-d H:i:s');
+        // --- Recent orders (10) ---
+        $recentOrders = Order::with('user')->latest()->take(10)->get();
 
-        return view('dashboard', compact('label', 'startDate', 'endDate'))->with($this->appContextService->getContext());
+        // --- Recent wallet transactions (8) ---
+        $recentWalletTx = WalletTransaction::with('user')->latest()->take(8)->get();
+
+        // --- Top customers (5) ---
+        $topCustomers = User::withCount('orders')
+            ->withSum('orders', 'total')
+            ->where('sa', 0)->where('admin', 0)->where('support', 0)
+            ->having('orders_count', '>', 0)
+            ->orderByDesc('orders_sum_total')
+            ->take(5)
+            ->get();
+
+        // --- Zone activity ---
+        $zoneActivity = Zone::withCount('orders')
+            ->having('orders_count', '>', 0)
+            ->orderByDesc('orders_count')
+            ->take(8)
+            ->get();
+
+        // --- Recent users (8) ---
+        $recentUsers = User::where('sa', 0)->where('admin', 0)->where('support', 0)
+            ->latest()
+            ->take(8)
+            ->get();
+
+        $stats = [
+            'total_orders' => $totalOrders,
+            'total_revenue' => $totalRevenue,
+            'paid_orders_count' => $paidOrdersCount,
+            'pending_orders_count' => $pendingOrdersCount,
+            'total_users' => $totalUsers,
+            'total_wallet_balance' => $totalWalletBalance,
+            'orders_today' => $ordersToday,
+            'revenue_today' => $revenueToday,
+            'new_users_today' => $newUsersToday,
+            'cancelled_today' => $cancelledToday,
+            'wallet_credited_today' => $walletCreditedToday,
+            'wallet_tx_today' => $walletTxToday,
+            'orders_by_status' => $ordersByStatus,
+        ];
+
+        return view('dashboard', compact(
+            'stats',
+            'recentOrders',
+            'recentWalletTx',
+            'topCustomers',
+            'zoneActivity',
+            'recentUsers',
+        ));
     }
 
 

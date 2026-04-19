@@ -4,7 +4,10 @@
             <tr>
                 <th>SN</th>
                 <th>Order ID</th>
-                <th>Customer</th>
+                @if (isset($viewpage) && $viewpage)
+                @else
+                    <th>Customer</th>
+                @endif
                 <th>Zone</th>
                 <th>Total</th>
                 <th>Payment</th>
@@ -32,7 +35,8 @@
         'autoreload' => false,
         'stateSave' => true,
         'ajax_url' => route('tables.orders', [
-            'userid' => isset($userid) ? $userid : $currentUser->id,
+            'userid' => isset($userid) ? $userid : null,
+            'viewpage' => isset($viewpage) ? $viewpage : false,
         ]),
     ];
 @endphp
