@@ -134,6 +134,31 @@
     <script>
         //$('#flash-overlay-modal').modal();
     </script>
+
+    <script>
+        jQuery(document).ready(function() {
+            $(document).on('click', '.advance-status-btn', function() {
+                const btn = $(this);
+                const next = btn.data('next');
+                if (!confirm(`Mark order as "${next.replace(/_/g,' ')}"?`)) return;
+                $.post(btn.data('url'), {
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    })
+                    .done(() => location.href = btn.data('redirect'))
+                    .fail(xhr => alert(xhr.responseJSON?.message ?? 'Error'));
+            });
+
+            $(document).on('click', '.cancel-order-btn', function() {
+                if (!confirm('Cancel this order?')) return;
+                const btn = $(this);
+                $.post(btn.data('url'), {
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    })
+                    .done(() => location.href = btn.data('redirect'))
+                    .fail(xhr => alert(xhr.responseJSON?.message ?? 'Error'));
+            });
+        });
+    </script>
 </body>
 
 </html>
