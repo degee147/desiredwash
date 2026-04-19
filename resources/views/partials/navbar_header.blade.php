@@ -24,7 +24,7 @@
                         </a>
                         <div aria-labelledby="dropdownBasic3" class="dropdown-menu dropdown-menu-right">
 
-                            <a href="{{ route('dashboard') }}" class="dropdown-item py-1">
+                            <a href="{{ route('home') }}" class="dropdown-item py-1">
                                 <i class="ft-home mr-2"></i>
                                 <span>Home</span>
                             </a>
