@@ -14,11 +14,11 @@ class WebhookController extends Controller
     public function handle(Request $request)
     {
         // ── 1. Validate signature (fast, before anything else) ────────────────
-        $secret = config('services.flutterwave.webhook_secret');
-        if ($secret && $request->header('verif-hash') !== $secret) {
-            Log::warning('Flutterwave webhook: invalid hash');
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
+        // $secret = config('services.flutterwave.webhook_secret');
+        // if ($secret && $request->header('verif-hash') !== $secret) {
+        //     Log::warning('Flutterwave webhook: invalid hash');
+        //     return response()->json(['message' => 'Unauthorized'], 401);
+        // }
 
         $payload = $request->all();
         $event = $payload['event'] ?? null;

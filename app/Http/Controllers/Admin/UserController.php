@@ -103,7 +103,7 @@ class UserController extends Controller
                 'reference' => $txRef,
             ]);
 
-            $balance = $this->appContextService->updateUserBalance($user->id);
+            $this->appContextService->updateUserBalance($user->id);
 
 
         });
