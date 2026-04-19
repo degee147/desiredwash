@@ -98,6 +98,7 @@ class UserController extends Controller
                 'type' => 'credit',
                 'status' => 'completed',
                 'amount' => $amount,
+                'processed_at' => now(),
                 'description' => 'Admin Wallet top-up',
                 'reference' => $txRef,
             ]);
