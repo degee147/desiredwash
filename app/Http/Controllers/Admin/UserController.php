@@ -34,28 +34,7 @@ class UserController extends Controller
         $this->appContextService->updateUserBalance($user->id);
         return view('admin.users.show', compact('user', 'zone'));
     }
-    // public function show(Request $request, User $user)
-    // {
-    //     // --- Date Range Setup ---
-    //     $label = 'Last 3 Months';
-    //     $startDate = Carbon::now()->subMonths(3)->startOfMonth()->format('Y-m-d H:i:s');
-    //     $endDate = Carbon::now()->format('Y-m-d H:i:s');
 
-    //     if ($request->isMethod('post')) {
-    //         $startDate = $request->input('startDate');
-    //         $endDate = $request->input('endDate');
-    //         $label = $request->input('label');
-    //     }
-
-    //     // --- Bot ---
-
-    //     // --- Today's Wins & Losses ---
-    //     $todayStart = Carbon::today()->format('Y-m-d H:i:s');
-    //     $now = Carbon::now()->format('Y-m-d H:i:s');
-
-    //     $user->load(['orders', 'notifications']);
-    //     return view('admin.users.show', compact('user', 'startDate', 'endDate', 'label', 'todayStart', 'now'));
-    // }
 
 
 
@@ -127,6 +106,9 @@ class UserController extends Controller
 
 
         });
+
+
+        $this->notifications->walletTopup($user->id, $amount);
 
         return back()->with('success', '₦' . number_format($amount, 2) . ' added to ' . $user->name . "'s wallet.");
     }
