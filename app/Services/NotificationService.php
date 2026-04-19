@@ -60,7 +60,35 @@ class NotificationService
             null, // order_id FK is int; pass null to avoid UUID cast issues — deep-link via data payload
         );
     }
+    public function orderPickedUp(int $userId, string $orderId, string $orderRef): void
+    {
+        $this->send(
+            $userId,
+            '🚗 Laundry Picked Up!',
+            "We've collected your laundry for order #{$orderRef}. It's in good hands!",
+            self::TYPE_ORDER_PICKED_UP,
+        );
+    }
 
+    public function orderReady(int $userId, string $orderId, string $orderRef): void
+    {
+        $this->send(
+            $userId,
+            '✨ Laundry Ready!',
+            "Your laundry for order #{$orderRef} is clean and ready for delivery.",
+            self::TYPE_ORDER_READY,
+        );
+    }
+
+    public function orderDelivered(int $userId, string $orderId, string $orderRef): void
+    {
+        $this->send(
+            $userId,
+            '🎉 Order Delivered!',
+            "Your laundry for order #{$orderRef} has been delivered. Enjoy the freshness!",
+            self::TYPE_ORDER_DELIVERED,
+        );
+    }
     public function paymentSuccess(int $userId, float $amount, string $orderRef): void
     {
         $fmt = '₦' . number_format($amount, 0, '.', ',');

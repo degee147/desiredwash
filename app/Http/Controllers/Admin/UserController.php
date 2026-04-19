@@ -10,7 +10,6 @@ use App\Services\AppContextService;
 use App\Services\FlutterwaveService;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -32,6 +31,7 @@ class UserController extends Controller
     public function show(Request $request, User $user)
     {
         $zone = Zone::find($user->zone_id);
+        $this->appContextService->updateUserBalance($user->id);
         return view('admin.users.show', compact('user', 'zone'));
     }
     // public function show(Request $request, User $user)
@@ -82,6 +82,7 @@ class UserController extends Controller
         ]);
 
         $user->update($data);
+        $this->appContextService->updateUserBalance($user->id);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'User updated successfully.');
