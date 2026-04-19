@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\WalletTransaction;
+use App\Services\AppContextService;
 use App\Services\NotificationService;
 use App\Traits\TraitsManager;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -14,6 +17,7 @@ class OrderController extends Controller
 
     public function __construct(
         private NotificationService $notifications,
+        private AppContextService $appContextService,
     ) {
     }
 
@@ -55,39 +59,70 @@ class OrderController extends Controller
 
         return back()->with('success', 'Order status updated.');
     }
-
     public function advanceStatus(Request $request, Order $order)
     {
         $next = self::STATUS_FLOW[$order->status] ?? null;
 
-        abort_if(!$next, 422, 'Order cannot be advanced from this status.');
+        if (!$next) {
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json(['message' => 'Order cannot be advanced from this status.'], 422);
+            }
+            return back()->with('error', 'Order cannot be advanced from this status.');
+        }
 
         $previousStatus = $order->status;
         $order->update(['status' => $next]);
 
         $this->notifyStatusChange($order, $next, $previousStatus);
 
-        return response()->json([
-            'status' => $next,
-            'badge' => $this->badge($next),
-            'canAdvance' => isset(self::STATUS_FLOW[$next]),
-            'nextLabel' => self::STATUS_FLOW[$next] ?? null,
-        ]);
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'status' => $next,
+                'badge' => $this->badge($next),
+                'canAdvance' => isset(self::STATUS_FLOW[$next]),
+                'nextLabel' => self::STATUS_FLOW[$next] ?? null,
+            ]);
+        }
+
+        return back()->with('success', 'Order status updated.');
     }
 
     public function cancelOrder(Request $request, Order $order)
     {
-        abort_if(in_array($order->status, ['delivered', 'cancelled']), 422, 'Cannot cancel.');
+        if (in_array($order->status, ['delivered', 'cancelled'])) {
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json(['message' => 'Cannot cancel this order.'], 422);
+            }
+            return back()->with('error', 'Cannot cancel this order.');
+        }
 
-        $order->update(['status' => 'cancelled']);
+        DB::transaction(function () use ($order) {
+            $order->update(['status' => 'cancelled']);
+
+            if ($order->payment_method === 'wallet' && $order->payment_status === 'success') {
+                WalletTransaction::create([
+                    'user_id' => $order->user_id,
+                    'type' => 'credit',
+                    'amount' => $order->total,
+                    'status' => 'completed',
+                    'description' => "Refund for cancelled order #{$order->id}",
+                    'reference' => $order->id,
+                ]);
+
+                $this->appContextService->updateUserBalance($order->user_id);
+            }
+        });
 
         $wasWalletRefund = $order->payment_method === 'wallet' && $order->payment_status === 'success';
         $ref = strtoupper(substr($order->id, 0, 8));
         $this->notifications->orderCancelled($order->user_id, $ref, $wasWalletRefund);
 
-        return response()->json(['status' => 'cancelled', 'badge' => $this->badge('cancelled')]);
-    }
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json(['status' => 'cancelled', 'badge' => $this->badge('cancelled')]);
+        }
 
+        return back()->with('success', 'Order cancelled.');
+    }
     // ── Private helpers ───────────────────────────────────────────────────────
 
     private function notifyStatusChange(Order $order, string $newStatus, string $previousStatus): void
