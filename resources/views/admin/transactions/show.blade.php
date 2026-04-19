@@ -31,6 +31,12 @@
                         <span class="badge badge-{{ $statusColor }}">
                             {{ ucfirst($transaction->status) }}
                         </span>
+                        @if (in_array($transaction->status, ['pending', 'failed']))
+                            <button class="btn btn-sm btn-warning btn-raised verify-txn-btn"
+                                data-url="{{ route('admin.transactions.verify', $transaction->id) }}">
+                                <i class="fa fa-refresh"></i> Verify on Flutterwave
+                            </button>
+                        @endif
                     </div>
                 </div>
 

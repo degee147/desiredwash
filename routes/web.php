@@ -113,6 +113,7 @@ Route::middleware('auth')->group(function () {
             Route::prefix('transactions')->name('transactions.')->group(function () {
                 Route::get('/', [TransactionController::class, 'index'])->name('index');
                 Route::get('/{transaction}', [TransactionController::class, 'show'])->name('show');
+                Route::post('/{transaction}/verify', [TransactionController::class, 'verify'])->name('verify');
             });
 
             // Notifications

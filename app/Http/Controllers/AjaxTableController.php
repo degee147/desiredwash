@@ -250,7 +250,6 @@ class AjaxTableController extends Controller
     public function transactions(Request $request, $userid = null, $viewpage = false)
     {
         $viewpage = filter_var($viewpage, FILTER_VALIDATE_BOOLEAN);
-        // $currentUser = $userid ? User::findOrFail($userid) : null;
         $q = $request->query();
 
         $columnsMap = [
@@ -307,13 +306,24 @@ class AjaxTableController extends Controller
                 $row[] = e($t->user?->name ?? '—') . '<br><small class="text-muted">' . e($t->user?->email ?? '') . '</small>';
             }
 
+            $verifyBtn = '';
+            if (in_array($t->status, ['pending', 'failed'])) {
+                $verifyBtn = ' <button
+                class="btn btn-xs btn-warning btn-raised btn-icon verify-txn-btn"
+                title="Verify on Flutterwave"
+                data-id="' . $t->id . '"
+                data-url="' . route('admin.transactions.verify', $t->id) . '"
+            ><i class="fa fa-refresh"></i></button>';
+            }
+
             $row = array_merge($row, [
                 '<span class="badge badge-secondary">' . e($t->type) . '</span>',
                 '₦' . number_format((float) $t->amount, 2),
                 e($t->currency ?? 'NGN'),
                 $this->badge($t->status, 'payment'),
                 $t->created_at?->format('M j, Y g:i A') ?? '—',
-                '<a href="' . route('admin.transactions.show', $t->id) . '" class="btn btn-xs btn-primary btn-raised btn-icon" title="View"><i class="fa fa-search"></i></a>',
+                '<a href="' . route('admin.transactions.show', $t->id) . '" class="btn btn-xs btn-primary btn-raised btn-icon" title="View"><i class="fa fa-search"></i></a>'
+                . $verifyBtn,
             ]);
 
             $rows[] = $row;

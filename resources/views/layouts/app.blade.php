@@ -138,6 +138,20 @@
     <script>
         jQuery(document).ready(function() {
 
+            $(document).on('click', '.verify-txn-btn', function() {
+                const btn = $(this);
+                if (!confirm('Verify this transaction on Flutterwave?')) return;
+
+                $.post(btn.data('url'), {
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    })
+                    .done(res => {
+                        alert(res.message ?? 'Transaction verified successfully.');
+                        location.reload();
+                    })
+                    .fail(xhr => alert(xhr.responseJSON?.message ?? 'Verification failed.'));
+            });
+
             $(document).on('click', '.advance-status-btn', function() {
                 const btn = $(this);
                 const next = btn.data('next');
