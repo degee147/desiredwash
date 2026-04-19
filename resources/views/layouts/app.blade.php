@@ -137,14 +137,18 @@
 
     <script>
         jQuery(document).ready(function() {
+
             $(document).on('click', '.advance-status-btn', function() {
                 const btn = $(this);
                 const next = btn.data('next');
-                if (!confirm(`Mark order as "${next.replace(/_/g,' ')}"?`)) return;
+                if (!confirm(`Mark order as "${next.replace(/_/g, ' ')}"?`)) return;
                 $.post(btn.data('url'), {
                         _token: $('meta[name="csrf-token"]').attr('content')
                     })
-                    .done(() => location.href = btn.data('redirect'))
+                    .done(res => {
+                        alert(`Order marked as "${next.replace(/_/g, ' ')}"`);
+                        location.reload();
+                    })
                     .fail(xhr => alert(xhr.responseJSON?.message ?? 'Error'));
             });
 
@@ -154,9 +158,21 @@
                 $.post(btn.data('url'), {
                         _token: $('meta[name="csrf-token"]').attr('content')
                     })
-                    .done(() => location.href = btn.data('redirect'))
+                    .done(() => {
+                        alert('Order cancelled.');
+                        location.reload();
+                    })
                     .fail(xhr => alert(xhr.responseJSON?.message ?? 'Error'));
             });
+
+            $(document).on('submit', '#status-update-form', function(e) {
+                e.preventDefault();
+                const form = $(this);
+                $.post(form.attr('action'), form.serialize())
+                    .done(() => location.reload())
+                    .fail(xhr => alert(xhr.responseJSON?.message ?? 'Error updating status'));
+            });
+
         });
     </script>
 </body>

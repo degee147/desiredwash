@@ -45,6 +45,14 @@ class OrderController extends Controller
 
         $this->notifyStatusChange($order, $data['status'], $previousStatus);
 
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'status' => $data['status'],
+                'badge' => $this->badge($data['status']),
+                'message' => 'Order status updated.',
+            ]);
+        }
+
         return back()->with('success', 'Order status updated.');
     }
 
