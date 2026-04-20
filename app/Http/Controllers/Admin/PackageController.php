@@ -29,6 +29,7 @@ class PackageController extends Controller
 
     public function edit(Package $package)
     {
+        abort_unless(auth()->user()->isSuperAdmin(), 403);
         return view('admin.packages.edit', compact('package'));
     }
 

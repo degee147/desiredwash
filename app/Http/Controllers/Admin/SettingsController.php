@@ -10,6 +10,7 @@ class SettingsController extends Controller
 {
     public function edit()
     {
+        abort_unless(auth()->user()->isSuperAdmin(), 403);
         return view('admin.settings.edit', [
             'phone' => Option::get('phone'),
         ]);

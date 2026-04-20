@@ -30,6 +30,7 @@ class PriceController extends Controller
 
     public function edit(Price $price)
     {
+        abort_unless(auth()->user()->isSuperAdmin(), 403);
         return view('admin.prices.edit', compact('price'));
     }
 

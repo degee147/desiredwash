@@ -29,6 +29,7 @@ class ServiceController extends Controller
 
     public function edit(Service $service)
     {
+        abort_unless(auth()->user()->isSuperAdmin(), 403);
         return view('admin.services.edit', compact('service'));
     }
 
