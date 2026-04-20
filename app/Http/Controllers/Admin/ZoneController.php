@@ -42,6 +42,7 @@ class ZoneController extends Controller
 
     public function edit(Zone $zone)
     {
+        abort_unless(auth()->user()->isSuperAdmin(), 403);
         return view('admin.zones.edit', compact('zone'));
     }
 
