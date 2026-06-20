@@ -24,14 +24,18 @@ trait TraitsManager
     // IndicatorTrait;
     private function badge(string $value, string $context = 'order'): string
     {
-        $map = $context === 'payment'
-            ? [
+        $map = match ($context) {
+            'payment' => [
                 'successful' => 'badge-success',
                 'pending' => 'badge-warning',
                 'failed' => 'badge-danger',
                 'cancelled' => 'badge-secondary',
-            ]
-            : [
+            ],
+            'order_type' => [
+                'express' => 'badge-warning',
+                'standard' => 'badge-light',
+            ],
+            default => [
                 'delivered' => 'badge-success',
                 'processing' => 'badge-info',
                 'picked_up' => 'badge-info',
@@ -39,10 +43,13 @@ trait TraitsManager
                 'ready' => 'badge-primary',
                 'pending' => 'badge-warning',
                 'cancelled' => 'badge-danger',
-            ];
+            ],
+        };
+
+        $icon = $context === 'order_type' && $value === 'express' ? '⚡ ' : '';
 
         return '<span class="badge ' . ($map[$value] ?? 'badge-secondary') . '">'
-            . e(ucfirst(str_replace('_', ' ', $value))) . '</span>';
+            . $icon . e(ucfirst(str_replace('_', ' ', $value))) . '</span>';
     }
     // private function badge(string $value, string $type = 'status'): string
     // {

@@ -35,6 +35,7 @@ class OrderController extends Controller
             'currentUser' => auth()->user(),
             'statusBadge' => $this->badge($order->status),
             'paymentBadge' => $this->badge($order->payment_status, 'payment'),
+            'orderTypeBadge' => $this->badge($order->order_type ?? 'standard', 'order_type'),
         ]);
     }
 

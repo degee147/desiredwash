@@ -132,6 +132,9 @@
                         <dt class="col-sm-4">Zone</dt>
                         <dd class="col-sm-8">{{ $order->zone_name ?? '—' }}</dd>
 
+                        <dt class="col-sm-4">Order type</dt>
+                        <dd class="col-sm-8">{!! $orderTypeBadge !!}</dd>
+
                         <dt class="col-sm-4">Address</dt>
                         <dd class="col-sm-8">{{ $order->address ?? '—' }}</dd>
 

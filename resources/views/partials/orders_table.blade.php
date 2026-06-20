@@ -10,6 +10,7 @@
                 @endif
                 <th>Zone</th>
                 <th>Total</th>
+                <th>Order Type</th>
                 <th>Payment</th>
                 <th>Status</th>
                 <th>Date</th>

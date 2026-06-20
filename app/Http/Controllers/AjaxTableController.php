@@ -148,20 +148,22 @@ class AjaxTableController extends Controller
         $columnsMap = $viewpage ? [
             1 => 'id',
             2 => 'total',
-            3 => 'status',
-            4 => 'payment_status',
-            5 => 'created_at',
+            3 => 'order_type',
+            4 => 'status',
+            5 => 'payment_status',
+            6 => 'created_at',
         ] : [
             1 => 'id',
             2 => 'total',
-            3 => 'status',
-            4 => 'payment_status',
-            5 => 'created_at',
-            6 => 'created_at', // customer col non-sortable, keep index safe
+            3 => 'order_type',
+            4 => 'status',
+            5 => 'payment_status',
+            6 => 'created_at',
+            7 => 'created_at', // customer col non-sortable, keep index safe
         ];
 
         $query = Order::with('user')->orderBy(
-            $columnsMap[$q['order'][0]['column'] ?? 5] ?? 'created_at',
+            $columnsMap[$q['order'][0]['column'] ?? 6] ?? 'created_at',
             strtoupper($q['order'][0]['dir'] ?? 'DESC')
         );
 
@@ -176,6 +178,7 @@ class AjaxTableController extends Controller
                     ->orWhere('zone_name', 'like', "%{$term}%")
                     ->orWhere('address', 'like', "%{$term}%")
                     ->orWhere('status', 'like', "%{$term}%")
+                    ->orWhere('order_type', 'like', "%{$term}%")
                     ->orWhereHas(
                         'user',
                         fn($uq) =>
@@ -187,6 +190,10 @@ class AjaxTableController extends Controller
 
         if (!empty($q['status'])) {
             $query->where('status', $q['status']);
+        }
+
+        if (!empty($q['order_type'])) {
+            $query->where('order_type', $q['order_type']);
         }
 
         [$total, $items] = $this->paginate($query, $q);
@@ -231,6 +238,7 @@ class AjaxTableController extends Controller
             $row = array_merge($row, [
                 e($o->zone_name ?? '—'),
                 '₦' . number_format((float) $o->total, 2),
+                $this->badge($o->order_type ?? 'standard', 'order_type'),
                 $this->badge($o->payment_status, 'payment'),
                 $this->badge($o->status),
                 $o->created_at?->format('M j, Y, g:i a') ?? '—',
