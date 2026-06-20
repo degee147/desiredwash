@@ -26,6 +26,7 @@ class Order extends Model
         'status',
         'notes',
         'payment_reference',
+        'order_type',
     ];
 
     protected $casts = [
