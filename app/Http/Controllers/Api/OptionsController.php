@@ -34,13 +34,13 @@ class OptionsController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'phone'                       => Option::get('phone', ''),
-            'express_multiplier'          => (float) Option::get('express_multiplier', 1.8),
-            'standard_order_label'        => Option::get('standard_order_label', 'Standard'),
-            'standard_order_subtitle'     => Option::get('standard_order_subtitle', 'Normal turnaround time'),
-            'express_order_label'         => Option::get('express_order_label', 'Express'),
-            'express_order_subtitle'      => Option::get('express_order_subtitle', 'Priority processing'),
-            'express_order_badge'         => Option::get('express_order_badge', '{multiplier}x price'),
+            'phone' => Option::get('phone', ''),
+            'express_multiplier' => (float) Option::get('express_multiplier', 1.8),
+            'standard_order_label' => Option::get('standard_order_label', 'Standard'),
+            'standard_order_subtitle' => Option::get('standard_order_subtitle', 'Normal turnaround time'),
+            'express_order_label' => Option::get('express_order_label', 'Express'),
+            'express_order_subtitle' => Option::get('express_order_subtitle', 'Priority processing'),
+            'express_order_badge' => Option::get('express_order_badge', 'In one day.'),
             'express_order_summary_label' => Option::get('express_order_summary_label', 'Express Order ({multiplier}x price)'),
         ]);
     }
@@ -53,7 +53,7 @@ class OptionsController extends Controller
     public function update(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'key'   => ['required', 'string', 'max:100'],
+            'key' => ['required', 'string', 'max:100'],
             'value' => ['required', 'string', 'max:500'],
         ]);
 
@@ -61,8 +61,8 @@ class OptionsController extends Controller
 
         return response()->json([
             'message' => 'Option updated.',
-            'key'     => $validated['key'],
-            'value'   => $validated['value'],
+            'key' => $validated['key'],
+            'value' => $validated['value'],
         ]);
     }
 }
