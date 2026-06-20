@@ -65,6 +65,88 @@
                             @enderror
                         </div>
 
+                        <hr class="my-4">
+
+                        {{-- Order Type Copy --}}
+                        <h6 class="text-muted text-uppercase mb-2" style="font-size:11px;letter-spacing:.08em">
+                            Order Type Labels
+                        </h6>
+                        <p class="text-muted" style="font-size:13px;margin-top:-4px">
+                            Text shown on the mobile app's order type selector and order summary.
+                            Use <code>{multiplier}</code> as a placeholder — it's automatically replaced
+                            with the Express Order Multiplier above (e.g. <code>1.8</code>).
+                        </p>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Standard order — title <span class="text-danger">*</span></label>
+                                <input type="text" name="standard_order_label"
+                                    class="form-control @error('standard_order_label') is-invalid @enderror"
+                                    value="{{ old('standard_order_label', $standard_order_label) }}" required>
+                                @error('standard_order_label')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Standard order — subtitle <span class="text-danger">*</span></label>
+                                <input type="text" name="standard_order_subtitle"
+                                    class="form-control @error('standard_order_subtitle') is-invalid @enderror"
+                                    value="{{ old('standard_order_subtitle', $standard_order_subtitle) }}" required>
+                                @error('standard_order_subtitle')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Express order — title <span class="text-danger">*</span></label>
+                                <input type="text" name="express_order_label"
+                                    class="form-control @error('express_order_label') is-invalid @enderror"
+                                    value="{{ old('express_order_label', $express_order_label) }}" required>
+                                @error('express_order_label')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Express order — subtitle <span class="text-danger">*</span></label>
+                                <input type="text" name="express_order_subtitle"
+                                    class="form-control @error('express_order_subtitle') is-invalid @enderror"
+                                    value="{{ old('express_order_subtitle', $express_order_subtitle) }}" required>
+                                @error('express_order_subtitle')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Express order — badge text <span class="text-danger">*</span></label>
+                            <input type="text" name="express_order_badge"
+                                class="form-control @error('express_order_badge') is-invalid @enderror"
+                                value="{{ old('express_order_badge', $express_order_badge) }}" required>
+                            <small class="text-muted">
+                                Small badge on the Express card. Preview:
+                                <strong>{{ str_replace('{multiplier}', $express_multiplier ?: 1.8, old('express_order_badge', $express_order_badge)) }}</strong>
+                            </small>
+                            @error('express_order_badge')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Express order — summary banner text <span class="text-danger">*</span></label>
+                            <input type="text" name="express_order_summary_label"
+                                class="form-control @error('express_order_summary_label') is-invalid @enderror"
+                                value="{{ old('express_order_summary_label', $express_order_summary_label) }}" required>
+                            <small class="text-muted">
+                                Shown in the order summary card when Express is selected. Preview:
+                                <strong>{{ str_replace('{multiplier}', $express_multiplier ?: 1.8, old('express_order_summary_label', $express_order_summary_label)) }}</strong>
+                            </small>
+                            @error('express_order_summary_label')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <div class="d-flex" style="gap:8px">
                             <button type="submit" class="btn btn-primary btn-raised">
                                 <i class="fa fa-save"></i> Save settings
@@ -115,6 +197,36 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Mobile App Preview</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-1" style="font-size:11px;text-transform:uppercase;letter-spacing:.06em">
+                        Order type selector
+                    </p>
+                    <div class="d-flex" style="gap:8px;margin-bottom:16px">
+                        <div style="flex:1;border:1px solid #eee;border-radius:10px;padding:10px;font-size:13px">
+                            <strong>{{ $standard_order_label }}</strong><br>
+                            <span class="text-muted" style="font-size:12px">{{ $standard_order_subtitle }}</span>
+                        </div>
+                        <div style="flex:1;border:1px solid #ffd080;border-radius:10px;padding:10px;font-size:13px;background:#fff8e6">
+                            <strong>{{ $express_order_label }}</strong><br>
+                            <span class="text-muted" style="font-size:12px">{{ $express_order_subtitle }}</span><br>
+                            <span class="badge badge-warning text-dark mt-1">
+                                {{ str_replace('{multiplier}', $express_multiplier ?: 1.8, $express_order_badge) }}
+                            </span>
+                        </div>
+                    </div>
+                    <p class="text-muted mb-1" style="font-size:11px;text-transform:uppercase;letter-spacing:.06em">
+                        Order summary banner (express selected)
+                    </p>
+                    <div style="font-size:12px;color:#e6980a;font-weight:700">
+                        ⚡ {{ str_replace('{multiplier}', $express_multiplier ?: 1.8, $express_order_summary_label) }}
+                    </div>
                 </div>
             </div>
         </div>

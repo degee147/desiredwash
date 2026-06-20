@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PriceSeeder::class,
             PackageSeeder::class,  // Add this line
+            OptionSeeder::class,
         ]);
     }
 }

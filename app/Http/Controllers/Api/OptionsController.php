@@ -17,14 +17,31 @@ class OptionsController extends Controller
      * Response:
      * {
      *   "phone": "2348012345678",
-     *   "express_multiplier": 1.8
+     *   "express_multiplier": 1.8,
+     *   "standard_order_label": "Standard",
+     *   "standard_order_subtitle": "Normal turnaround time",
+     *   "express_order_label": "Express",
+     *   "express_order_subtitle": "Priority processing",
+     *   "express_order_badge": "{multiplier}x price",
+     *   "express_order_summary_label": "Express Order ({multiplier}x price)"
      * }
+     *
+     * Note: "{multiplier}" is a placeholder the client substitutes with the
+     * current express_multiplier value (e.g. "1.8"). This keeps copy editable
+     * from the admin panel without requiring server-side string formatting
+     * per request.
      */
     public function index(): JsonResponse
     {
         return response()->json([
-            'phone'              => Option::get('phone', ''),
-            'express_multiplier' => (float) Option::get('express_multiplier', 1.8),
+            'phone'                       => Option::get('phone', ''),
+            'express_multiplier'          => (float) Option::get('express_multiplier', 1.8),
+            'standard_order_label'        => Option::get('standard_order_label', 'Standard'),
+            'standard_order_subtitle'     => Option::get('standard_order_subtitle', 'Normal turnaround time'),
+            'express_order_label'         => Option::get('express_order_label', 'Express'),
+            'express_order_subtitle'      => Option::get('express_order_subtitle', 'Priority processing'),
+            'express_order_badge'         => Option::get('express_order_badge', '{multiplier}x price'),
+            'express_order_summary_label' => Option::get('express_order_summary_label', 'Express Order ({multiplier}x price)'),
         ]);
     }
 
