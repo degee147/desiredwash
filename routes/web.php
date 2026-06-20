@@ -94,6 +94,12 @@ Route::middleware('auth')->group(function () {
                 Route::delete('/{zone}', [ZoneController::class, 'destroy'])->name('destroy');
             });
 
+            // Webhook Logs
+            Route::prefix('webhooks')->name('webhooks.')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Admin\WebhookLogController::class, 'index'])->name('index');
+                Route::post('/{webhookLog}/retry', [\App\Http\Controllers\Admin\WebhookLogController::class, 'retry'])->name('retry');
+            });
+
             // Settings
             Route::prefix('settings')->name('settings.')->group(function () {
                 Route::get('/', [SettingsController::class, 'edit'])->name('edit');

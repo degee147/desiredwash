@@ -35,11 +35,12 @@ return [
         ],
     ],
     'flutterwave' => [
-        'public_key' => env('FLW_PUBLIC_KEY'),
-        'secret_key' => env('FLW_SECRET_KEY'),
-        'webhook_secret' => env('FLW_WEBHOOK_SECRET'),
-        'secret_hash' => env('FLUTTERWAVE_SECRET_HASH'),
-        'env' => env('FLW_ENV'),
+        'public_key'     => env('FLW_PUBLIC_KEY', ''),
+        'secret_key'     => env('FLW_SECRET_KEY', ''),
+        'encryption_key' => env('FLW_ENCRYPTION_KEY', ''),
+        'webhook_secret' => env('FLW_WEBHOOK_SECRET', ''),
+        'secret_hash'    => env('FLUTTERWAVE_SECRET_HASH', ''),
+        'env'            => env('FLW_ENV', 'production'),
     ],
 
     'firebase' => [

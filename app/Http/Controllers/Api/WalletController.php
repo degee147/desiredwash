@@ -17,17 +17,14 @@ class WalletController extends Controller
         private FlutterwaveService $flutterwave,
         private NotificationService $notifications,
         private AppContextService $appContextService,
-    ) {
-    }
+    ) {}
 
     // GET /api/v1/wallet/balance
     public function balance(Request $request)
     {
-        $userId = $request->user()->id;
+        $userId  = $request->user()->id;
         $balance = $this->appContextService->updateUserBalance($userId);
-        return response()->json([
-            'balance' => (float) $balance,
-        ]);
+        return response()->json(['balance' => (float) $balance]);
     }
 
     // POST /api/v1/wallet/topup
@@ -37,19 +34,18 @@ class WalletController extends Controller
             'amount' => 'required|numeric|min:100',
         ]);
 
-        $user = $request->user();
-
+        $user      = $request->user();
         $timestamp = now()->timestamp;
-        $txRef = "wallet_topup_{$user->id}_{$timestamp}";
+        $txRef     = "wallet_topup_{$user->id}_{$timestamp}";
 
-        // ✅ Create PENDING transaction
+        // Create PENDING transaction
         WalletTransaction::create([
-            'user_id' => $user->id,
-            'type' => 'credit',
-            'status' => 'pending',
-            'amount' => $data['amount'],
+            'user_id'     => $user->id,
+            'type'        => 'credit',
+            'status'      => 'pending',
+            'amount'      => $data['amount'],
             'description' => 'Wallet top-up',
-            'reference' => $txRef,
+            'reference'   => $txRef,
         ]);
 
         // Generate payment link
@@ -69,7 +65,53 @@ class WalletController extends Controller
 
         return response()->json([
             'payment_link' => $paymentLink,
-            'reference' => $txRef,
+            'reference'    => $txRef,
+        ]);
+    }
+
+    // POST /api/v1/wallet/topup/virtual-account
+    public function createVirtualAccount(Request $request)
+    {
+        $data = $request->validate([
+            'amount' => 'required|numeric|min:100',
+        ]);
+
+        $user      = $request->user();
+        $timestamp = now()->timestamp;
+        $txRef     = "wallet_va_{$user->id}_{$timestamp}";
+
+        // Create PENDING transaction
+        WalletTransaction::create([
+            'user_id'     => $user->id,
+            'type'        => 'credit',
+            'status'      => 'pending',
+            'amount'      => $data['amount'],
+            'description' => 'Wallet top-up via bank transfer',
+            'reference'   => $txRef,
+        ]);
+
+        $vaData = $this->flutterwave->createVirtualAccount(
+            email:  $user->email,
+            name:   $user->name,
+            txRef:  $txRef,
+            amount: (float) $data['amount'],
+            phone:  $user->phone ?? '',
+        );
+
+        if (!$vaData) {
+            return response()->json([
+                'message' => 'Could not generate account details. Please try again.'
+            ], 502);
+        }
+
+        return response()->json([
+            'reference'       => $txRef,
+            'bank_name'       => $vaData['bank_name']        ?? null,
+            'account_number'  => $vaData['account_number']   ?? null,
+            'account_name'    => $vaData['account_name']     ?? $user->name,
+            'amount'          => (float) $data['amount'],
+            'expires_at'      => $vaData['expiry_date']      ?? null,
+            'note'            => 'Transfer the exact amount shown. Your wallet will be credited automatically within minutes.',
         ]);
     }
 
@@ -82,11 +124,9 @@ class WalletController extends Controller
 
         $user = $request->user();
 
-        // Find transaction
         $transaction = WalletTransaction::where('reference', $data['transaction_ref'])
             ->where('user_id', $user->id)
             ->first();
-
 
         if (!$transaction) {
             return response()->json(['message' => 'Transaction not found'], 404);
@@ -94,32 +134,16 @@ class WalletController extends Controller
 
         // Prevent double processing
         if ($transaction->status === 'completed') {
-            return response()->json([
-                'new_balance' => (float) $user->wallet_balance
-            ]);
+            return response()->json(['new_balance' => (float) $user->wallet_balance]);
         }
-
 
         if (config('services.flutterwave.env') === 'staging') {
-
-            // Update transaction → triggers model event
-            $transaction->update([
-                'status' => 'completed',
-            ]);
-
-            // 🔔 Notify: wallet credited
+            $transaction->update(['status' => 'completed']);
             $this->notifications->walletTopup($user->id, (float) $transaction->amount);
-
-            return response()->json([
-                'new_balance' => (float) $user->fresh()->wallet_balance
-            ]);
-
-
+            return response()->json(['new_balance' => (float) $user->fresh()->wallet_balance]);
         }
 
-
-        sleep(10); // wait for FW to update transaction status
-        // Get transaction from Flutterwave
+        sleep(10);
         $fwTransaction = $this->flutterwave->getTransactionByRef($data['transaction_ref']);
 
         if (!$fwTransaction) {
@@ -127,7 +151,6 @@ class WalletController extends Controller
         }
 
         $verified = $this->flutterwave->verifyTransaction((string) $fwTransaction['id']);
-
 
         if (
             !$verified ||
@@ -139,20 +162,10 @@ class WalletController extends Controller
 
         $amount = (float) $verified['amount'];
 
-
-        // Update transaction → triggers model event
-        $transaction->update([
-            'status' => 'completed',
-        ]);
-
-        // 🔔 Notify: wallet credited
+        $transaction->update(['status' => 'completed']);
         $this->notifications->walletTopup($user->id, $amount);
 
-        return response()->json([
-            'new_balance' => (float) $user->fresh()->wallet_balance
-        ]);
-
-
+        return response()->json(['new_balance' => (float) $user->fresh()->wallet_balance]);
     }
 
     // GET /api/v1/wallet/transactions
@@ -169,7 +182,6 @@ class WalletController extends Controller
 
     public function trunc(Request $request)
     {
-
         DB::statement('TRUNCATE TABLE transactions');
         DB::statement('TRUNCATE TABLE wallet_transactions');
         DB::statement('TRUNCATE TABLE orders');

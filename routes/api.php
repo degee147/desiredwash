@@ -32,6 +32,9 @@ Route::get('zones', [ZoneController::class, 'index']);
 Route::get('services', [ServicesController::class, 'index']);
 Route::get('options', [OptionsController::class, 'index']);
 
+// Admin-only option update (should be behind admin middleware in production)
+Route::middleware('auth:sanctum')->put('admin/options', [OptionsController::class, 'update']);
+
 // ── Flutterwave webhook (public — verified by verif-hash header) ──────────
 Route::post('webhooks/flutterwave', [WebhookController::class, 'handle']);
 
@@ -61,6 +64,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Wallet
     Route::get('wallet/balance', [WalletController::class, 'balance']);
     Route::post('wallet/topup', [WalletController::class, 'topup']);
+    Route::post('wallet/topup/virtual-account', [WalletController::class, 'createVirtualAccount']);
     Route::post('wallet/topup/verify', [WalletController::class, 'verifyTopup']);
     Route::get('wallet/transactions', [WalletController::class, 'transactions']);
     Route::post('wallet/trunc', [WalletController::class, 'trunc']);

@@ -58,6 +58,7 @@ class Order extends Model
             'payment_method'        => $this->payment_method,
             'payment_status'        => $this->payment_status,
             'status'                => $this->status,
+            'order_type'            => $this->order_type ?? 'standard',
             'notes'                 => $this->notes,
             'created_at'            => $this->created_at?->toIso8601String(),
         ];

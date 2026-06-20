@@ -13,10 +13,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Exclude Flutterwave webhook from CSRF — it's verified via verif-hash header instead
         $middleware->validateCsrfTokens(except: [
-            'api/v1/payments/webhook',
+            'api/v1/webhooks/flutterwave',
+            'api/v1/payments/webhook', // legacy path — keep for safety
         ]);
-        $middleware->statefulApi(); // keeps sanctum working on other routes
+        $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

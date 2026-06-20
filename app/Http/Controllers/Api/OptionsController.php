@@ -13,17 +13,18 @@ class OptionsController extends Controller
      * GET /api/v1/options
      *
      * Returns public app-wide settings.
-     * Currently: the admin contact phone number for wallet funding.
      *
      * Response:
      * {
-     *   "phone": "2348012345678"
+     *   "phone": "2348012345678",
+     *   "express_multiplier": 1.8
      * }
      */
     public function index(): JsonResponse
     {
         return response()->json([
-            'phone' => Option::get('phone', ''),
+            'phone'              => Option::get('phone', ''),
+            'express_multiplier' => (float) Option::get('express_multiplier', 1.8),
         ]);
     }
 
@@ -31,13 +32,11 @@ class OptionsController extends Controller
      * PUT /api/v1/admin/options
      *
      * Admin-only: update any option by key.
-     *
-     * Body: { "key": "phone", "value": "2348099999999" }
      */
     public function update(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'key' => ['required', 'string', 'max:100'],
+            'key'   => ['required', 'string', 'max:100'],
             'value' => ['required', 'string', 'max:500'],
         ]);
 
@@ -45,8 +44,8 @@ class OptionsController extends Controller
 
         return response()->json([
             'message' => 'Option updated.',
-            'key' => $validated['key'],
-            'value' => $validated['value'],
+            'key'     => $validated['key'],
+            'value'   => $validated['value'],
         ]);
     }
 }
