@@ -32,7 +32,67 @@ class UserController extends Controller
     {
         $zone = Zone::find($user->zone_id);
         $this->appContextService->updateUserBalance($user->id);
-        return view('admin.users.show', compact('user', 'zone'));
+
+        $user->load([
+            'orders',
+            'walletTransactions' => fn($q) => $q->latest()->limit(20),
+            'transactions'       => fn($q) => $q->latest()->limit(20),
+        ]);
+
+        // ── Order stats ───────────────────────────────────────────────────────
+        $orders        = $user->orders;
+        $orderStats    = [
+            'total'     => $orders->count(),
+            'confirmed' => $orders->whereIn('status', ['confirmed', 'picked_up', 'washing', 'ready_for_delivery', 'delivered'])->count(),
+            'delivered' => $orders->where('status', 'delivered')->count(),
+            'cancelled' => $orders->where('status', 'cancelled')->count(),
+            'pending'   => $orders->where('status', 'pending')->count(),
+            'express'   => $orders->where('order_type', 'express')->count(),
+            'total_spent' => $orders->where('payment_status', 'success')->sum('total'),
+            'avg_order'   => $orders->where('payment_status', 'success')->avg('total') ?? 0,
+            'last_order'  => $orders->sortByDesc('created_at')->first(),
+        ];
+
+        // ── Wallet stats ──────────────────────────────────────────────────────
+        $walletTxns    = $user->walletTransactions;
+        $walletStats   = [
+            'balance'       => (float) $user->wallet_balance,
+            'total_funded'  => $walletTxns->where('type', 'credit')->where('status', 'completed')->sum('amount'),
+            'total_spent'   => $walletTxns->where('type', 'debit')->where('status', 'completed')->sum('amount'),
+            'pending_topups'=> $walletTxns->where('type', 'credit')->where('status', 'pending')->count(),
+            'has_va'        => (bool) $user->va_account_number,
+        ];
+
+        // ── Recent activity (last 8 events across orders + wallet) ────────────
+        $recentActivity = collect();
+
+        foreach ($orders->sortByDesc('created_at')->take(5) as $o) {
+            $recentActivity->push([
+                'type'  => 'order',
+                'icon'  => 'fa-shopping-bag',
+                'color' => 'primary',
+                'label' => 'Order #' . strtoupper(substr($o->id, 0, 8)),
+                'sub'   => ucfirst($o->status) . ' · ₦' . number_format((float) $o->total, 0),
+                'time'  => $o->created_at,
+            ]);
+        }
+
+        foreach ($walletTxns->sortByDesc('created_at')->take(5) as $t) {
+            $recentActivity->push([
+                'type'  => 'wallet',
+                'icon'  => $t->type === 'credit' ? 'fa-arrow-down' : 'fa-arrow-up',
+                'color' => $t->type === 'credit' ? 'success' : 'danger',
+                'label' => $t->description,
+                'sub'   => ($t->type === 'credit' ? '+' : '-') . '₦' . number_format((float) $t->amount, 0) . ' · ' . ucfirst($t->status),
+                'time'  => $t->created_at,
+            ]);
+        }
+
+        $recentActivity = $recentActivity->sortByDesc('time')->take(8)->values();
+
+        return view('admin.users.show', compact(
+            'user', 'zone', 'orderStats', 'walletStats', 'recentActivity'
+        ));
     }
 
 
