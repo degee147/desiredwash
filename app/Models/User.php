@@ -26,6 +26,10 @@ class User extends Authenticatable
         'auth_provider',
         'avatar_url',
         'zone_id',
+        'va_bank_name',
+        'va_account_number',
+        'va_account_name',
+        'va_flw_ref',
     ];
 
     protected $hidden = [

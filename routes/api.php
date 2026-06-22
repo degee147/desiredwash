@@ -63,8 +63,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Wallet
     Route::get('wallet/balance', [WalletController::class, 'balance']);
+    Route::get('wallet/virtual-account', [WalletController::class, 'virtualAccount']);
     Route::post('wallet/topup', [WalletController::class, 'topup']);
-    Route::post('wallet/topup/virtual-account', [WalletController::class, 'createVirtualAccount']);
     Route::post('wallet/topup/verify', [WalletController::class, 'verifyTopup']);
     Route::get('wallet/transactions', [WalletController::class, 'transactions']);
     Route::post('wallet/trunc', [WalletController::class, 'trunc']);

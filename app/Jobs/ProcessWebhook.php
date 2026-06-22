@@ -66,7 +66,7 @@ class ProcessWebhook implements ShouldQueue
             //
             // Prefixes used in this codebase:
             //   wallet_topup_{user_id}_{timestamp}  — card/link top-up
-            //   wallet_va_{user_id}_{timestamp}      — bank transfer (virtual account)
+            //   wallet_va_{user_id}                  — bank transfer (permanent virtual account)
             //   {uuid}                               — order payment (order id is the ref)
             //
             if (str_starts_with((string) $txRef, 'wallet_topup_') ||
@@ -113,10 +113,11 @@ class ProcessWebhook implements ShouldQueue
      *
      * Works for both:
      *   - wallet_topup_{user_id}_{ts}  (Flutterwave payment link)
-     *   - wallet_va_{user_id}_{ts}     (virtual account bank transfer)
+     *   - wallet_va_{user_id}           (permanent virtual account bank transfer)
      *
-     * Safe to run multiple times — the idempotency check on `reference`
-     * ensures we never double-credit.
+     * For permanent VAs, each transfer from Flutterwave arrives with a unique
+     * flw_ref but the same tx_ref — so we use flw_ref for idempotency instead
+     * of tx_ref to allow multiple top-ups to the same permanent account.
      */
     private function processWalletTopup(
         string $txRef,
@@ -124,10 +125,10 @@ class ProcessWebhook implements ShouldQueue
         NotificationService $notifications,
         AppContextService $appContext,
     ): void {
-        // Parse user_id from ref  e.g. "wallet_topup_42_1718000000" → 42
-        //                          or  "wallet_va_42_1718000000"     → 42
+        // Parse user_id from ref:
+        //   wallet_topup_42_1718000000 → parts[2] = 42
+        //   wallet_va_42               → parts[2] = 42
         $parts  = explode('_', $txRef);
-        // wallet_topup_X → parts[2]; wallet_va_X → parts[2]
         $userId = $parts[2] ?? null;
 
         if (!$userId || !is_numeric($userId)) {
@@ -136,22 +137,29 @@ class ProcessWebhook implements ShouldQueue
             );
         }
 
-        $user = User::find((int) $userId);
+        $user = \App\Models\User::find((int) $userId);
         if (!$user) {
             throw new \RuntimeException("User {$userId} not found for wallet ref: {$txRef}");
         }
 
-        // Idempotency: check WalletTransaction by reference
-        if (WalletTransaction::where('reference', $txRef)
+        // For permanent VAs: use flw_ref for idempotency — the same tx_ref
+        // (wallet_va_{id}) arrives with every transfer to that account,
+        // so tx_ref alone cannot distinguish individual top-ups.
+        $isPermanentVa = str_starts_with($txRef, 'wallet_va_') && !str_contains($txRef, '_', strlen('wallet_va_') + strlen($userId));
+        $idempotencyKey = $isPermanentVa
+            ? ($verified['flw_ref'] ?? $txRef)
+            : $txRef;
+
+        // Idempotency check
+        if (WalletTransaction::where('reference', $idempotencyKey)
             ->where('status', 'completed')->exists()) {
-            Log::info('ProcessWebhook: wallet topup already applied', ['tx_ref' => $txRef]);
+            \Illuminate\Support\Facades\Log::info('ProcessWebhook: wallet topup already applied', ['key' => $idempotencyKey]);
             return;
         }
 
         $amount   = (float) $verified['amount'];
         $currency = strtoupper($verified['currency'] ?? 'NGN');
 
-        // Basic sanity checks
         if ($amount <= 0) {
             throw new \RuntimeException("Invalid amount {$amount} for ref: {$txRef}");
         }
@@ -159,36 +167,45 @@ class ProcessWebhook implements ShouldQueue
             throw new \RuntimeException("Unexpected currency {$currency} for ref: {$txRef}");
         }
 
-        DB::transaction(function () use ($user, $amount, $txRef, $appContext) {
-            // Mark any existing pending transaction as completed
-            $existing = WalletTransaction::where('reference', $txRef)
-                ->where('status', 'pending')->first();
-
-            if ($existing) {
-                $existing->update(['status' => 'completed', 'amount' => $amount]);
-            } else {
-                // Create fresh (e.g. payment link bypassed the /topup endpoint)
+        DB::transaction(function () use ($user, $amount, $txRef, $idempotencyKey, $isPermanentVa, $appContext) {
+            if ($isPermanentVa) {
+                // Always create a fresh transaction row per transfer
                 WalletTransaction::create([
                     'user_id'     => $user->id,
                     'type'        => 'credit',
                     'amount'      => $amount,
                     'status'      => 'completed',
-                    'description' => 'Wallet top-up',
-                    'reference'   => $txRef,
+                    'description' => 'Wallet top-up via bank transfer',
+                    'reference'   => $idempotencyKey,
                 ]);
+            } else {
+                // Card/link: mark the pre-created pending transaction as completed
+                $existing = WalletTransaction::where('reference', $idempotencyKey)
+                    ->where('status', 'pending')->first();
+
+                if ($existing) {
+                    $existing->update(['status' => 'completed', 'amount' => $amount]);
+                } else {
+                    WalletTransaction::create([
+                        'user_id'     => $user->id,
+                        'type'        => 'credit',
+                        'amount'      => $amount,
+                        'status'      => 'completed',
+                        'description' => 'Wallet top-up',
+                        'reference'   => $idempotencyKey,
+                    ]);
+                }
             }
 
-            // Recompute balance from transactions table (AppContextService handles this)
             $appContext->updateUserBalance($user->id);
         });
 
-        // Push notification + in-app
         $notifications->walletTopup((int) $userId, $amount);
 
-        Log::info('ProcessWebhook: wallet topped up', [
-            'user_id' => $userId,
-            'amount'  => $amount,
-            'tx_ref'  => $txRef,
+        \Illuminate\Support\Facades\Log::info('ProcessWebhook: wallet topped up', [
+            'user_id'         => $userId,
+            'amount'          => $amount,
+            'idempotency_key' => $idempotencyKey,
         ]);
     }
 

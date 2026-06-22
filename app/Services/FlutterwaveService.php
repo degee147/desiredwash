@@ -20,14 +20,14 @@ class FlutterwaveService
     // ─── Virtual Account (wallet funding) ────────────────────────────────────
 
     /**
-     * Create a Flutterwave virtual account for a user (one-time top-up).
+     * Create a permanent Flutterwave virtual account for a user.
+     * Any transfer to this account credits the user's wallet via webhook.
      * Returns the virtual account data array or null on failure.
      */
     public function createVirtualAccount(
         string $email,
         string $name,
         string $txRef,
-        float  $amount,
         string $phone = '',
     ): ?array {
         try {
@@ -35,15 +35,14 @@ class FlutterwaveService
 
             $payload = [
                 'email'        => $email,
-                'is_permanent' => false,
-                'bvn'          => '22190239921', // placeholder — replace with user BVN in production
+                'is_permanent' => true,
+                'bvn'          => '22190239921',
                 'tx_ref'       => $txRef,
-                'amount'       => $amount,
                 'currency'     => 'NGN',
                 'phonenumber'  => $phone ?: '08000000000',
                 'firstname'    => $nameParts[0],
                 'lastname'     => $nameParts[1] ?? $nameParts[0],
-                'narration'    => 'DesiredWash Wallet Top-up',
+                'narration'    => 'DesiredWash Wallet',
             ];
 
             $response = Http::withToken($this->secretKey)

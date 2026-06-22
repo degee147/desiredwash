@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\WalletTransaction;
 use App\Services\AppContextService;
 use App\Services\FlutterwaveService;
@@ -19,7 +18,8 @@ class WalletController extends Controller
         private AppContextService $appContextService,
     ) {}
 
-    // GET /api/v1/wallet/balance
+    // ── GET /api/v1/wallet/balance ────────────────────────────────────────────
+
     public function balance(Request $request)
     {
         $userId  = $request->user()->id;
@@ -27,7 +27,60 @@ class WalletController extends Controller
         return response()->json(['balance' => (float) $balance]);
     }
 
-    // POST /api/v1/wallet/topup
+    // ── GET /api/v1/wallet/virtual-account ───────────────────────────────────
+    //
+    // Returns the user's permanent virtual account, creating one on Flutterwave
+    // if the user doesn't have one yet.
+    // Any bank transfer to this account credits the wallet via webhook.
+
+    public function virtualAccount(Request $request)
+    {
+        $user = $request->user();
+
+        // Return cached account if already provisioned
+        if ($user->va_account_number) {
+            return response()->json($this->formatVaResponse($user));
+        }
+
+        // Provision a new permanent virtual account
+        $txRef  = "wallet_va_{$user->id}";
+        $vaData = $this->flutterwave->createVirtualAccount(
+            email: $user->email,
+            name:  $user->name,
+            txRef: $txRef,
+            phone: $user->phone ?? '',
+        );
+
+        if (!$vaData) {
+            return response()->json([
+                'message' => 'Could not generate account details. Please try again.',
+            ], 502);
+        }
+
+        // Persist on user so we never call Flutterwave again for this user
+        $user->update([
+            'va_bank_name'      => $vaData['bank_name']      ?? null,
+            'va_account_number' => $vaData['account_number'] ?? null,
+            'va_account_name'   => $vaData['account_name']   ?? $user->name,
+            'va_flw_ref'        => $vaData['order_ref']      ?? $txRef,
+        ]);
+
+        return response()->json($this->formatVaResponse($user->fresh()));
+    }
+
+    private function formatVaResponse($user): array
+    {
+        return [
+            'bank_name'      => $user->va_bank_name,
+            'account_number' => $user->va_account_number,
+            'account_name'   => $user->va_account_name,
+            'note'           => 'Transfer any amount to this account. Your wallet will be credited automatically.',
+        ];
+    }
+
+    // ── POST /api/v1/wallet/topup ─────────────────────────────────────────────
+    // Card/link top-up flow (unchanged)
+
     public function topup(Request $request)
     {
         $data = $request->validate([
@@ -38,7 +91,6 @@ class WalletController extends Controller
         $timestamp = now()->timestamp;
         $txRef     = "wallet_topup_{$user->id}_{$timestamp}";
 
-        // Create PENDING transaction
         WalletTransaction::create([
             'user_id'     => $user->id,
             'type'        => 'credit',
@@ -48,7 +100,6 @@ class WalletController extends Controller
             'reference'   => $txRef,
         ]);
 
-        // Generate payment link
         $paymentLink = $this->flutterwave->createWalletTopupLink(
             $user->id,
             (float) $data['amount'],
@@ -59,7 +110,7 @@ class WalletController extends Controller
 
         if (!$paymentLink) {
             return response()->json([
-                'message' => 'Could not initiate payment. Please try again.'
+                'message' => 'Could not initiate payment. Please try again.',
             ], 502);
         }
 
@@ -69,53 +120,9 @@ class WalletController extends Controller
         ]);
     }
 
-    // POST /api/v1/wallet/topup/virtual-account
-    public function createVirtualAccount(Request $request)
-    {
-        $data = $request->validate([
-            'amount' => 'required|numeric|min:100',
-        ]);
+    // ── POST /api/v1/wallet/topup/verify ─────────────────────────────────────
+    // Card payment verification (unchanged — bank transfers credit via webhook)
 
-        $user      = $request->user();
-        $timestamp = now()->timestamp;
-        $txRef     = "wallet_va_{$user->id}_{$timestamp}";
-
-        // Create PENDING transaction
-        WalletTransaction::create([
-            'user_id'     => $user->id,
-            'type'        => 'credit',
-            'status'      => 'pending',
-            'amount'      => $data['amount'],
-            'description' => 'Wallet top-up via bank transfer',
-            'reference'   => $txRef,
-        ]);
-
-        $vaData = $this->flutterwave->createVirtualAccount(
-            email:  $user->email,
-            name:   $user->name,
-            txRef:  $txRef,
-            amount: (float) $data['amount'],
-            phone:  $user->phone ?? '',
-        );
-
-        if (!$vaData) {
-            return response()->json([
-                'message' => 'Could not generate account details. Please try again.'
-            ], 502);
-        }
-
-        return response()->json([
-            'reference'       => $txRef,
-            'bank_name'       => $vaData['bank_name']        ?? null,
-            'account_number'  => $vaData['account_number']   ?? null,
-            'account_name'    => $vaData['account_name']     ?? $user->name,
-            'amount'          => (float) $data['amount'],
-            'expires_at'      => $vaData['expiry_date']      ?? null,
-            'note'            => 'Transfer the exact amount shown. Your wallet will be credited automatically within minutes.',
-        ]);
-    }
-
-    // POST /api/v1/wallet/topup/verify
     public function verifyTopup(Request $request)
     {
         $data = $request->validate([
@@ -132,7 +139,6 @@ class WalletController extends Controller
             return response()->json(['message' => 'Transaction not found'], 404);
         }
 
-        // Prevent double processing
         if ($transaction->status === 'completed') {
             return response()->json(['new_balance' => (float) $user->wallet_balance]);
         }
@@ -152,23 +158,19 @@ class WalletController extends Controller
 
         $verified = $this->flutterwave->verifyTransaction((string) $fwTransaction['id']);
 
-        if (
-            !$verified ||
-            $verified['status'] !== 'successful' ||
-            strtoupper($verified['currency']) !== 'NGN'
-        ) {
+        if (!$verified || $verified['status'] !== 'successful' || strtoupper($verified['currency']) !== 'NGN') {
             return response()->json(['message' => 'Payment verification failed'], 402);
         }
 
         $amount = (float) $verified['amount'];
-
         $transaction->update(['status' => 'completed']);
         $this->notifications->walletTopup($user->id, $amount);
 
         return response()->json(['new_balance' => (float) $user->fresh()->wallet_balance]);
     }
 
-    // GET /api/v1/wallet/transactions
+    // ── GET /api/v1/wallet/transactions ──────────────────────────────────────
+
     public function transactions(Request $request)
     {
         $transactions = $request->user()
