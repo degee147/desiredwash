@@ -48,7 +48,8 @@
                         <div class="form-group">
                             <label>Express Order Multiplier <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <input type="number" step="0.1" min="1" max="10" name="express_multiplier"
+                                <input type="number" step="0.1" min="1" max="10"
+                                    name="express_multiplier"
                                     class="form-control @error('express_multiplier') is-invalid @enderror"
                                     value="{{ old('express_multiplier', $express_multiplier) }}" required>
                                 <div class="input-group-append">
@@ -58,7 +59,8 @@
                             <small class="text-muted">
                                 Express price = base price × this value.
                                 Default is <strong>1.8</strong>.
-                                Example: a ₦500 service becomes ₦{{ number_format(500 * ($express_multiplier ?: 1.8), 0) }} for express.
+                                Example: a ₦500 service becomes
+                                ₦{{ number_format(500 * ($express_multiplier ?: 1.8), 0) }} for express.
                             </small>
                             @error('express_multiplier')
                                 <span class="invalid-feedback">{{ $message }}</span>
@@ -127,6 +129,8 @@
                             <small class="text-muted">
                                 Small badge on the Express card. Preview:
                                 <strong>{{ str_replace('{multiplier}', $express_multiplier ?: 1.8, old('express_order_badge', $express_order_badge)) }}</strong>
+                                <br>
+                                <strong>or {multiplier}x price </strong>
                             </small>
                             @error('express_order_badge')
                                 <span class="invalid-feedback">{{ $message }}</span>
@@ -137,7 +141,8 @@
                             <label>Express order — summary banner text <span class="text-danger">*</span></label>
                             <input type="text" name="express_order_summary_label"
                                 class="form-control @error('express_order_summary_label') is-invalid @enderror"
-                                value="{{ old('express_order_summary_label', $express_order_summary_label) }}" required>
+                                value="{{ old('express_order_summary_label', $express_order_summary_label) }}"
+                                required>
                             <small class="text-muted">
                                 Shown in the order summary card when Express is selected. Preview:
                                 <strong>{{ str_replace('{multiplier}', $express_multiplier ?: 1.8, old('express_order_summary_label', $express_order_summary_label)) }}</strong>
@@ -186,14 +191,18 @@
                     </p>
                     <table class="table table-sm mb-0">
                         <thead>
-                            <tr><th>Standard</th><th>Express</th></tr>
+                            <tr>
+                                <th>Standard</th>
+                                <th>Express</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            @foreach([500, 1000, 2000, 3500, 5000] as $price)
-                            <tr>
-                                <td>₦{{ number_format($price, 0) }}</td>
-                                <td class="text-warning font-weight-bold">₦{{ number_format($price * ($express_multiplier ?: 1.8), 0) }}</td>
-                            </tr>
+                            @foreach ([500, 1000, 2000, 3500, 5000] as $price)
+                                <tr>
+                                    <td>₦{{ number_format($price, 0) }}</td>
+                                    <td class="text-warning font-weight-bold">
+                                        ₦{{ number_format($price * ($express_multiplier ?: 1.8), 0) }}</td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -213,7 +222,8 @@
                             <strong>{{ $standard_order_label }}</strong><br>
                             <span class="text-muted" style="font-size:12px">{{ $standard_order_subtitle }}</span>
                         </div>
-                        <div style="flex:1;border:1px solid #ffd080;border-radius:10px;padding:10px;font-size:13px;background:#fff8e6">
+                        <div
+                            style="flex:1;border:1px solid #ffd080;border-radius:10px;padding:10px;font-size:13px;background:#fff8e6">
                             <strong>{{ $express_order_label }}</strong><br>
                             <span class="text-muted" style="font-size:12px">{{ $express_order_subtitle }}</span><br>
                             <span class="badge badge-warning text-dark mt-1">
